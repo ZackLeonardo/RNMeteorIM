@@ -13,6 +13,7 @@ import {
 
 import Day from '../components/Day';
 import Avatar from '../components/Avatar';
+import Time from '../components/Time';
 
 export default class App extends Component {
     render() {
@@ -20,7 +21,16 @@ export default class App extends Component {
             <View style={ styles.container}>
               <Day />
               <Avatar  />
+              <Time
+                position={'left'}
+                currentMessage={{createdAt: 1360013296123}}
+              />
+              <Time
+                position={'right'}
+                currentMessage={{createdAt: 1360013296123}}
+              />
             </View>
+
         );
     }
 };

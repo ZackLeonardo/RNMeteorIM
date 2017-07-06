@@ -48,15 +48,6 @@ const styles = StyleSheet.create({
 
 });
 
-Day.propTypes = {
-  currentMessage: React.PropTypes.object,
-  previousMessage: React.PropTypes.object,
-  containerStyle: View.propTypes.style,
-  textStyle: Text.propTypes.style,
-  isSameDay: React.PropTypes.func,
-  isSameRoom: React.PropTypes.func,
-};
-
 Day.defaultProps = {
   currentMessage: {
     createdAt: null,
@@ -66,6 +57,15 @@ Day.defaultProps = {
   textStyle: {},
   isSameDay: warnDeprecated(isSameDay),
   isSameRoom: warnDeprecated(isSameRoom),
+};
+
+Day.propTypes = {
+  currentMessage: React.PropTypes.object,
+  previousMessage: React.PropTypes.object,
+  containerStyle: View.propTypes.style,
+  textStyle: Text.propTypes.style,
+  isSameDay: React.PropTypes.func,
+  isSameRoom: React.PropTypes.func,
 };
 
 module.exports = Day;

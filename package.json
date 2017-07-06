@@ -10,7 +10,8 @@
 		"moment": "^2.18.1",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.45.1",
-		"react-native-i18n": "^2.0.2"
+		"react-native-i18n": "^2.0.2",
+		"react-native-parsed-text": "0.0.18"
 	},
 	"devDependencies": {
 		"babel-jest": "20.0.3",
