@@ -1,0 +1,33 @@
+user信息:users
+{
+  id: ObjectID("aaaaa"),
+  name: 'Andrew',
+  avatar: '',
+}
+
+
+room信息:rooms
+{
+  id: ObjectID("B"),
+  name: 'Andrew',
+  users: [
+    {
+    userId:ObjectID("aaaaa"),
+    nickName: ""
+    },
+    {
+    userId:ObjectID("aaaaa"),
+    nickName: ""
+    }
+  ]
+}
+
+message信息:messages
+{
+  id: 1,
+  content: 'Confusion about Flux and Relay',
+  date: '',
+  room: ObjectID("B"),
+  user: ObjectID("B"),
+  status: 'read'
+}
