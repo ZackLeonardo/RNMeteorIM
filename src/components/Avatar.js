@@ -75,14 +75,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 5,
-    marginLeft: 5
   },
   textStyle:{
     color: 'black',
     fontSize: 16,
     backgroundColor: 'transparent',
     fontWeight: '100',
-    marginLeft: 5
   }
 
 });

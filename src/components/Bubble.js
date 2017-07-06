@@ -15,5 +15,9 @@ import {
 } from 'react-native';
 
 class Avatar extends Component{
-  
+  render(){
+    return (
+      
+    );
+  }
 }
