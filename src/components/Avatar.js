@@ -85,14 +85,6 @@ const styles = StyleSheet.create({
 
 });
 
-Avatar.propTypes = {
-  user: React.PropTypes.object,
-  avatarStyle: View.propTypes.style,
-  textStyle: Text.propTypes.style,
-  onPress: React.PropTypes.func,
-  showName: React.PropTypes.bool
-};
-
 Avatar.defaultProps = {
   user: {
     avatar: null,
@@ -104,6 +96,14 @@ Avatar.defaultProps = {
   textStyle: null,
   onPress: null,
   showName: false,
+};
+
+Avatar.propTypes = {
+  user: React.PropTypes.object,
+  avatarStyle: View.propTypes.style,
+  textStyle: Text.propTypes.style,
+  onPress: React.PropTypes.func,
+  showName: React.PropTypes.bool
 };
 
 module.exports = Avatar;

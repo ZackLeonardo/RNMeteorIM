@@ -14,6 +14,7 @@ import {
 import Day from '../components/Day';
 import Avatar from '../components/Avatar';
 import Time from '../components/Time';
+import MessageText from '../components/MessageText';
 
 export default class App extends Component {
     render() {
@@ -28,6 +29,12 @@ export default class App extends Component {
               <Time
                 position={'right'}
                 currentMessage={{createdAt: 1360013296123}}
+                textStyle = {{'right': styles['right'].textStyle}}
+              />
+              <MessageText
+                currentMessage={{
+                text: 'test : http://baidu.com 15810536985   wolf_dream@163.com'
+                }}
               />
             </View>
 
@@ -35,10 +42,25 @@ export default class App extends Component {
     }
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    marginBottom: 10,
-    flex: 1
-  }
-})
+const styles = {
+  left: StyleSheet.create({
+    container: {
+      marginTop: 20,
+      marginBottom: 10,
+      flex: 1
+    },
+    textStyle: {
+      color: 'red',
+    }
+  }),
+  right: StyleSheet.create({
+    container: {
+      marginTop: 20,
+      marginBottom: 10,
+      flex: 1
+    },
+    textStyle: {
+      color: 'red',
+    }
+  }),
+};
