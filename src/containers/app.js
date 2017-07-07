@@ -15,6 +15,7 @@ import Day from '../components/Day';
 import Avatar from '../components/Avatar';
 import Time from '../components/Time';
 import MessageText from '../components/MessageText';
+import MessageImage from '../components/MessageImage';
 
 export default class App extends Component {
     render() {
@@ -34,6 +35,11 @@ export default class App extends Component {
               <MessageText
                 currentMessage={{
                 text: 'test : http://baidu.com 15810536985   wolf_dream@163.com'
+                }}
+              />
+              <MessageImage
+                currentMessage={{
+                image: 'https://facebook.github.io/react/img/logo_og.png'
                 }}
               />
             </View>
