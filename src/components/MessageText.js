@@ -130,10 +130,13 @@ MessageText.propTypes = {
 const styles = {
   left: StyleSheet.create({
     containerStyle: {
+      paddingTop: 3,
+      borderRadius: 13,
     },
     textStyle: {
+      margin: 3,
       color: 'black',
-      ...textStyle,
+      ...textStyleCom,
     },
     linkStyle: {
       color: 'royalblue',
@@ -145,10 +148,11 @@ const styles = {
   }),
   right: StyleSheet.create({
     containerStyle: {
+      borderRadius: 13,
     },
     textStyle: {
       color: 'black',
-      ...textStyle,
+      ...textStyleCom,
     },
     linkStyle: {
       color: 'royalblue',
@@ -160,7 +164,7 @@ const styles = {
   }),
 }
 
-const textStyle = {
+const textStyleCom = {
   fontSize: 16,
   lineHeight: 20,
   marginTop: 5,
