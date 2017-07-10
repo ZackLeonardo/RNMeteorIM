@@ -148,9 +148,11 @@ const styles = {
   }),
   right: StyleSheet.create({
     containerStyle: {
+      paddingTop: 3,
       borderRadius: 13,
     },
     textStyle: {
+      margin: 3,
       color: 'black',
       ...textStyleCom,
     },

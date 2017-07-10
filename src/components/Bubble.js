@@ -28,32 +28,52 @@ class Bubble extends Component{
   }
 
   render(){
+    if (this.props.position === 'left'){
+      return (
+        <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
+          {this.renderTriangle()}
+          {this.renderBubble()}
+        </View>
+      );
+    }else {
+      return (
+        <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
+          {this.renderBubble()}
+          {this.renderTriangle()}
+        </View>
+      );
+    }
+  }
+
+  onLongPress() {
+  }
+
+  renderTriangle() {
+    var bkcolor = StyleSheet.flatten(styles[this.props.position].wrapperStyle).backgroundColor;
     return (
-      <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
-        <View style={[styles[this.props.position].wrapperStyle, this.props.wrapperStyle[this.props.position]]}>
-          <TouchableWithoutFeedback
-          onLongPress={this.onLongPress}
-          accessibilityTraits="text"
-          {...this.props.touchableProps}>
-            <View>
-            {this.renderCustomView()}
-            {this.renderMessageImage()}
-            {this.renderMessageText()}
+      <View style={[styles[this.props.position].triangleStyle, {borderBottomColor:bkcolor}]}/>
+    );
+  }
+
+  renderBubble() {
+    return (
+      <View style={[styles[this.props.position].wrapperStyle, this.props.wrapperStyle[this.props.position]]}>
+        <TouchableWithoutFeedback
+        onLongPress={this.onLongPress}
+        accessibilityTraits="text"
+        {...this.props.touchableProps}>
+          <View>
+          {this.renderCustomView()}
+          {this.renderMessageImage()}
+          {this.renderMessageText()}
             <View style={[styles.bottomContainerStyle, this.props.bottomContainerStyle[this.props.position]]}>
               {this.renderTime()}
               {this.renderStatus()}
             </View>
-            </View>
-
-
-          </TouchableWithoutFeedback>
-
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
-  }
-
-  onLongPress() {
   }
 
   renderCustomView() {
@@ -112,7 +132,6 @@ class Bubble extends Component{
       )
     }
   }
-
 }
 
 Bubble.defaultProps = {
@@ -159,27 +178,59 @@ Bubble.propTypes = {
 const styles = {
   left: StyleSheet.create({
     containerStyle: {
-      alignItems: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
     },
     wrapperStyle: {
       borderRadius: 15,
       backgroundColor: '#f0f0f0',
       marginRight: 60,
-      justifyContent: 'flex-end',
+      minHeight: 20,
+    },
+    triangleStyle: {
+      width: 0,
+      height: 0,
+      backgroundColor: 'transparent',
+      borderStyle: 'solid',
+      borderLeftWidth: 3,
+      borderRightWidth: 3,
+      borderBottomWidth: 6,
+      borderLeftColor: 'transparent',
+      borderRightColor: 'transparent',
+      transform: [
+        {rotate: '-90deg'}
+      ],
     }
+
   }),
   right: StyleSheet.create({
     containerStyle: {
-      flex: 1,
-      alignItems: 'flex-end',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
     },
     wrapperStyle: {
       borderRadius: 15,
       backgroundColor: '#0084ff',
       marginLeft: 60,
       minHeight: 20,
-      justifyContent: 'flex-end',
+
     },
+    triangleStyle: {
+      width: 0,
+      height: 0,
+      backgroundColor: 'transparent',
+      borderStyle: 'solid',
+      borderLeftWidth: 3,
+      borderRightWidth: 3,
+      borderBottomWidth: 6,
+      borderLeftColor: 'transparent',
+      borderRightColor: 'transparent',
+      transform: [
+        {rotate: '90deg'}
+      ],
+    }
   }),
   bottomContainerStyle: {
     flexDirection: 'row',
@@ -195,6 +246,20 @@ const styles = {
     backgroundColor: 'transparent',
     color: 'green',
   },
+
 }
+
+const triangleStyleCom = {
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 3,
+  borderRightWidth: 3,
+  borderBottomWidth: 6,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+};
+
 
 module.exports = Bubble;
