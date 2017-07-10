@@ -68,8 +68,7 @@ class Avatar extends Component{
 
 const styles = StyleSheet.create({
   containerStyle:{
-    flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   avatarStyle:{
     justifyContent: 'center',

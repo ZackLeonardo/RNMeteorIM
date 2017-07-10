@@ -13,8 +13,8 @@
         id: 42,
         content: 'Confusion about Flux and Relay',
         createdAt: '',
-        room: ObjectID("B"),
-        user: ObjectID("B"),
+        roomId: ObjectID("B"),
+        userId: ObjectID("B"),
         status: 'read'
       },
       ...

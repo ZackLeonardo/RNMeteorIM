@@ -17,48 +17,23 @@ import Time from '../components/Time';
 import MessageText from '../components/MessageText';
 import MessageImage from '../components/MessageImage';
 import Bubble from '../components/Bubble';
+import Message from '../components/Message';
 
 export default class App extends Component {
     render() {
         return (
-            <View style={ styles.container}>
+          <View style={ styles.container}>
+            <Message
+              currentMessage={{
+                createdAt: 1360013296123,
+                text: 'this is a test text'
 
-            <View style = {styles.thisView}>
-              <Bubble
-              currentMessage={{
-              image: 'https://facebook.github.io/react/img/logo_og.png',
-              createdAt: '2017/07/07 12:12:12',
-              sent: true,
-            }}
-              position = 'left'/>
-            </View>
-            <View style = {styles.thisView}>
-              <Bubble
-              currentMessage={{
-              text: 'https://facebook.github.io/react/img/logo_og.png',
-              createdAt: '2017/07/07 12:12:12',
-              sent: true,
-            }}
-              position = 'left'/>
-            </View>
-            <View style = {styles.thisView}>
-              <Bubble
-              currentMessage={{
-              image: 'https://facebook.github.io/react/img/logo_og.png',
-              createdAt: '2017/07/07 12:12:12',
-              sent: true,
-            }}
-              position = 'right'/>
-            </View>
-            <View style = {styles.thisView}>
-              <Bubble
-              currentMessage={{
-              text: 'https://facebook.github.io/react/img/logo_og.png',
-              createdAt: '2017/07/07 12:12:12',
-              sent: true,
-            }}
-              position = 'right'/>
-            </View>
+              }}
+              user = {{
+                avatar: 'https://facebook.github.io/react/img/logo_og.png',
+              }}
+              position='right'/>
+
           </View>
 
         );
@@ -113,4 +88,40 @@ const styles = {
   image: 'https://facebook.github.io/react/img/logo_og.png'
   }}
 />
+<View style = {styles.thisView}>
+  <Bubble
+  currentMessage={{
+  image: 'https://facebook.github.io/react/img/logo_og.png',
+  createdAt: '2017/07/07 12:12:12',
+  sent: true,
+}}
+  position = 'left'/>
+</View>
+<View style = {styles.thisView}>
+  <Bubble
+  currentMessage={{
+  text: 'https://facebook.github.io/react/img/logo_og.png',
+  createdAt: '2017/07/07 12:12:12',
+  sent: true,
+}}
+  position = 'left'/>
+</View>
+<View style = {styles.thisView}>
+  <Bubble
+  currentMessage={{
+  image: 'https://facebook.github.io/react/img/logo_og.png',
+  createdAt: '2017/07/07 12:12:12',
+  sent: true,
+}}
+  position = 'right'/>
+</View>
+<View style = {styles.thisView}>
+  <Bubble
+  currentMessage={{
+  text: 'https://facebook.github.io/react/img/logo_og.png',
+  createdAt: '2017/07/07 12:12:12',
+  sent: true,
+}}
+  position = 'right'/>
+</View>
 */
