@@ -9,9 +9,11 @@ import React, {Component} from 'react';
 import {
   Image,
   View,
+  ViewPropTypes,
   StyleSheet,
   Dimensions
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Lightbox from 'react-native-lightbox';
 
@@ -46,11 +48,11 @@ MessageImage.defaultProps = {
 };
 
 MessageImage.propTypes = {
-  containerStyle: View.propTypes.style,
-  lightboxProps: React.PropTypes.object,
-  imageStyle: View.propTypes.style,
-  imageProps: React.PropTypes.object,
-  currentMessage: React.PropTypes.object,
+  containerStyle: ViewPropTypes.style,
+  lightboxProps: PropTypes.object,
+  imageStyle: ViewPropTypes.style,
+  imageProps: PropTypes.object,
+  currentMessage: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

@@ -9,10 +9,12 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ViewPropTypes,
   Image,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 class Avatar extends Component{
   render(){
@@ -99,11 +101,11 @@ Avatar.defaultProps = {
 };
 
 Avatar.propTypes = {
-  user: React.PropTypes.object,
-  avatarStyle: View.propTypes.style,
+  user: PropTypes.object,
+  avatarStyle: ViewPropTypes.style,
   textStyle: Text.propTypes.style,
-  onPress: React.PropTypes.func,
-  showName: React.PropTypes.bool
+  onPress: PropTypes.func,
+  showName: PropTypes.bool
 };
 
 module.exports = Avatar;

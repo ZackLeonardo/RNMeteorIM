@@ -9,9 +9,11 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ViewPropTypes,
   Text,
   NativeModules
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import moment from 'moment/min/moment-with-locales.min';
 
@@ -60,12 +62,12 @@ Day.defaultProps = {
 };
 
 Day.propTypes = {
-  currentMessage: React.PropTypes.object,
-  previousMessage: React.PropTypes.object,
-  containerStyle: View.propTypes.style,
+  currentMessage: PropTypes.object,
+  previousMessage: PropTypes.object,
+  containerStyle: ViewPropTypes.style,
   textStyle: Text.propTypes.style,
-  isSameDay: React.PropTypes.func,
-  isSameRoom: React.PropTypes.func,
+  isSameDay: PropTypes.func,
+  isSameRoom: PropTypes.func,
 };
 
 module.exports = Day;

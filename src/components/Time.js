@@ -9,8 +9,10 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ViewPropTypes,
   Text
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import moment from 'moment/min/moment-with-locales.min';
 
@@ -67,16 +69,16 @@ Time.defaultProps = {
 };
 
 Time.propTypes = {
-  position: React.PropTypes.oneOf(['left', 'right']),
-  containerStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+  position: PropTypes.oneOf(['left', 'right']),
+  containerStyle: PropTypes.shape({
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
-  textStyle: React.PropTypes.shape({
+  textStyle: PropTypes.shape({
     left: Text.propTypes.style,
     right: Text.propTypes.style,
   }),
-  currentMessage: React.PropTypes.object,
+  currentMessage: PropTypes.object,
 };
 
 const containerStyle = {

@@ -1,6 +1,6 @@
 /**
  * React Native IM App with DDP(Meteor)
- * the Component which show user talking messages
+ * the Component which show user talking bubble
  *
  * @zack
  */
@@ -9,11 +9,13 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ViewPropTypes,
   Image,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import MessageText from './MessageText';
 import MessageImage from './MessageImage';
@@ -153,25 +155,25 @@ Bubble.defaultProps = {
 };
 
 Bubble.propTypes = {
-  position: React.PropTypes.oneOf(['left', 'right']),
-  containerStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+  position: PropTypes.oneOf(['left', 'right']),
+  containerStyle: PropTypes.shape({
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
-  wrapperStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+  wrapperStyle: PropTypes.shape({
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
-  currentMessage: React.PropTypes.object,
-  renderMessageImage: React.PropTypes.func,
-  renderMessageText: React.PropTypes.func,
-  bottomContainerStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+  currentMessage: PropTypes.object,
+  renderMessageImage: PropTypes.func,
+  renderMessageText: PropTypes.func,
+  bottomContainerStyle: PropTypes.shape({
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
-  renderTime: React.PropTypes.func,
-  touchableProps: React.PropTypes.object,
-  renderCustomView: React.PropTypes.func,
+  renderTime: PropTypes.func,
+  touchableProps: PropTypes.object,
+  renderCustomView: PropTypes.func,
   statusStyle: Text.propTypes.style,
 };
 
