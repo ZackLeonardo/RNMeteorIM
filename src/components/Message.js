@@ -1,7 +1,7 @@
 /**
  * React Native IM App with DDP(Meteor)
  * the Component which show user talking message contains avatar and bubble...
- *
+ * u can set showDate to let the day show or hide
  * @zack
  */
 
@@ -34,7 +34,7 @@
    }
 
    renderDay(){
-     if (this.props.currentMessage.createdAt){
+     if (this.props.currentMessage.createdAt && this.props.showDate === true){
        const dayProps = this.getInnerComponentProps();
        if (this.props.renderDay) {
          return this.props.renderDay(dayProps);
@@ -98,6 +98,7 @@
    user: {},
    position: 'left',
    containerStyle: {},
+   showDate: true,
  };
 
  Message.propTypes = {
@@ -108,6 +109,7 @@
      left: ViewPropTypes.style,
      right: ViewPropTypes.style,
    }),
+   showDate: PropTypes.bool,
  };
 
  module.exports = Message;

@@ -1,7 +1,7 @@
 /**
  * React Native IM App with DDP(Meteor)
  * the Component which show day info abow the talk
- *
+ * u can set showDateType & props.showDate to show only day or day-time or nothing
  * @zack
  */
 
@@ -25,10 +25,20 @@ class Day extends Component {
       return (
         <View style = {[ styles.container, this.props.containerStyle]}>
           <Text style = {[ styles.text, this.props.textStyle]}>
-            {moment().utc(this.props.currentMessage.createdAt).locale(getLocale()).format('LL').toUpperCase()}
+            {this.dateShow()}
           </Text>
         </View>
       );
+    }
+    return null;
+  }
+
+  dateShow(){
+    if (this.props.showDateType === 'showTimeInDay') {
+      return moment.utc(this.props.currentMessage.createdAt).locale(getLocale()).format('LLL').toUpperCase();
+    }
+    if (this.props.showDateType === 'showDay') {
+      return moment().utc(this.props.currentMessage.createdAt).locale(getLocale()).format('LL').toUpperCase();
     }
     return null;
   }
@@ -59,6 +69,7 @@ Day.defaultProps = {
   textStyle: {},
   isSameDay: warnDeprecated(isSameDay),
   isSameRoom: warnDeprecated(isSameRoom),
+  showDateType: 'showTimeInDay',
 };
 
 Day.propTypes = {
@@ -68,6 +79,7 @@ Day.propTypes = {
   textStyle: Text.propTypes.style,
   isSameDay: PropTypes.func,
   isSameRoom: PropTypes.func,
+  showDateType: PropTypes.oneOf(['showDay', 'showTimeInDay']),
 };
 
 module.exports = Day;

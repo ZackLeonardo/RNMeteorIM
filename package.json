@@ -9,10 +9,11 @@
 	"dependencies": {
 		"moment": "^2.18.1",
 		"prop-types": "^15.5.10",
-		"react": "16.0.0-alpha.12",
-		"react-native": "0.45.1",
+		"react": "^16.0.0-alpha.12",
+		"react-native": "^0.46.2",
 		"react-native-i18n": "^2.0.2",
 		"react-native-lightbox": "^0.6.0",
+		"react-native-meteor": "^1.1.0",
 		"react-native-parsed-text": "0.0.18"
 	},
 	"devDependencies": {

@@ -8,7 +8,9 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    View
+    View,
+    Text,
+    TouchableOpacity,
 } from 'react-native';
 
 import Day from '../components/Day';
@@ -18,27 +20,51 @@ import MessageText from '../components/MessageText';
 import MessageImage from '../components/MessageImage';
 import Bubble from '../components/Bubble';
 import Message from '../components/Message';
+import Meteor, { createContainer } from 'react-native-meteor';
+import MessageList from '../components/MessageList';
+
 
 export default class App extends Component {
-    render() {
-        return (
-          <View style={ styles.container}>
-            <Message
-              currentMessage={{
-                createdAt: 1360013296123,
-                text: 'this is a test text'
+  constructor(props) {
+   super(props);
+   this.state = {
+      messages: [
+        {text: 'China', userId: '1', createdAt: '1995-12-25 10:00:00',
+          sent: true,},
+        {text: 'India', userId: '2', createdAt: '1995-12-25 10:02:00',sent: true,},
+        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:06:00'},
+        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:10:00'},
+        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:12:00'},
+        {text: 'China', userId: '1', createdAt: '1995-12-25 10:16:00'},
+        {text: 'India', userId: '2', createdAt: '1995-12-25 10:20:00'},
+        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:30:00'},
+        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:33:00'},
+        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:35:00'},
+        {text: 'China', userId: '1', createdAt: '1995-12-25 10:38:00'},
+        {text: 'India', userId: '2', createdAt: '1995-12-25 10:38:00'},
+        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:40:00'},
+        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:50:00'},
+        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:59:00'}
 
-              }}
-              user = {{
-                avatar: 'https://facebook.github.io/react/img/logo_og.png',
-              }}
-              position='right'/>
+      ],
+      user: {
+        id: '1',
+        avatar: 'https://facebook.github.io/react/img/logo_og.png'
+      }
+   };
+  }
 
-          </View>
-
-        );
-    }
-};
+  render(){
+    return (
+      <View style={styles.thisView}>
+        <MessageList
+          messages={this.state.messages}
+          user = {this.state.user}
+        />
+      </View>
+    );
+  }
+}
 
 const styles = {
   left: StyleSheet.create({
@@ -63,65 +89,9 @@ const styles = {
   }),
   thisView: {
     marginTop: 10,
-  }
+  },
+  button: {
+    padding: 10,
+    backgroundColor: '#c5c5c5',
+  },
 };
-
-/*
-<Day />
-<Avatar  />
-<Time
-  position={'left'}
-  currentMessage={{createdAt: 1360013296123}}
-/>
-<Time
-  position={'right'}
-  currentMessage={{createdAt: 1360013296123}}
-  textStyle = {{'right': styles['right'].textStyle}}
-/>
-<MessageText
-  currentMessage={{
-  text: 'test : http://baidu.com 15810536985   wolf_dream@163.com'
-  }}
-/>
-<MessageImage
-  currentMessage={{
-  image: 'https://facebook.github.io/react/img/logo_og.png'
-  }}
-/>
-<View style = {styles.thisView}>
-  <Bubble
-  currentMessage={{
-  image: 'https://facebook.github.io/react/img/logo_og.png',
-  createdAt: '2017/07/07 12:12:12',
-  sent: true,
-}}
-  position = 'left'/>
-</View>
-<View style = {styles.thisView}>
-  <Bubble
-  currentMessage={{
-  text: 'https://facebook.github.io/react/img/logo_og.png',
-  createdAt: '2017/07/07 12:12:12',
-  sent: true,
-}}
-  position = 'left'/>
-</View>
-<View style = {styles.thisView}>
-  <Bubble
-  currentMessage={{
-  image: 'https://facebook.github.io/react/img/logo_og.png',
-  createdAt: '2017/07/07 12:12:12',
-  sent: true,
-}}
-  position = 'right'/>
-</View>
-<View style = {styles.thisView}>
-  <Bubble
-  currentMessage={{
-  text: 'https://facebook.github.io/react/img/logo_og.png',
-  createdAt: '2017/07/07 12:12:12',
-  sent: true,
-}}
-  position = 'right'/>
-</View>
-*/

@@ -17,7 +17,7 @@ class MessageContainer extends Component{
     super(props);
 
     this.state = {
-      
+
     };
   }
 
