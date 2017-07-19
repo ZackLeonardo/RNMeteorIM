@@ -60,10 +60,13 @@ class Bubble extends Component{
           {this.renderCustomView()}
           {this.renderMessageImage()}
           {this.renderMessageText()}
+          { this.props.showTime ?
             <View style={[styles.bottomContainerStyle, this.props.bottomContainerStyle[this.props.position]]}>
-              {this.renderTime()}
-              {this.renderStatus()}
+                {this.renderTime()}
+                {this.renderStatus()}
             </View>
+           : null}
+
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -101,14 +104,12 @@ class Bubble extends Component{
   }
 
   renderTime() {
-    if (this.props.showTime) {
-      if (this.props.currentMessage.createdAt) {
-        const {containerStyle, wrapperStyle, ...timeProps} = this.props;
-        if (this.props.renderTime) {
-          return this.props.renderTime(timeProps);
-        }
-        return <Time {...timeProps}/>;
+    if (this.props.currentMessage.createdAt) {
+      const {containerStyle, wrapperStyle, ...timeProps} = this.props;
+      if (this.props.renderTime) {
+        return this.props.renderTime(timeProps);
       }
+      return <Time {...timeProps}/>;
     }
     return null;
   }
