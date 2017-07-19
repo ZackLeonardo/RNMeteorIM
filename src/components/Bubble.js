@@ -30,21 +30,13 @@ class Bubble extends Component{
   }
 
   render(){
-    if (this.props.position === 'left'){
-      return (
-        <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
-          {this.renderTriangle()}
-          {this.renderBubble()}
-        </View>
-      );
-    }else {
-      return (
-        <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
-          {this.renderBubble()}
-          {this.renderTriangle()}
-        </View>
-      );
-    }
+    return (
+      <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
+        {this.props.position === 'left' ? this.renderTriangle() : null}
+        {this.renderBubble()}
+        {this.props.position === 'right' ? this.renderTriangle() : null}
+      </View>
+    );
   }
 
   onLongPress() {
@@ -253,7 +245,7 @@ const styles = {
   statusStyle: {
     fontSize: 10,
     backgroundColor: 'transparent',
-    color: 'green',
+    color: 'black',
   },
 
 }
