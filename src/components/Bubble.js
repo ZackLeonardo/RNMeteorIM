@@ -109,18 +109,20 @@ class Bubble extends Component{
   }
 
   renderTime() {
-    if (this.props.currentMessage.createdAt) {
-      const {containerStyle, wrapperStyle, ...timeProps} = this.props;
-      if (this.props.renderTime) {
-        return this.props.renderTime(timeProps);
+    if (this.props.showTime) {
+      if (this.props.currentMessage.createdAt) {
+        const {containerStyle, wrapperStyle, ...timeProps} = this.props;
+        if (this.props.renderTime) {
+          return this.props.renderTime(timeProps);
+        }
+        return <Time {...timeProps}/>;
       }
-      return <Time {...timeProps}/>;
     }
     return null;
   }
 
   renderStatus() {
-    const {currentMessage} = this.props;
+    const { currentMessage } = this.props;
     if (this.props.renderStatus) {
         return this.props.renderStatus(currentMessage);
     }
@@ -152,6 +154,7 @@ Bubble.defaultProps = {
   bottomContainerStyle: {},
   renderTime: null,
   statusStyle: {},
+  showTime: false,
 };
 
 Bubble.propTypes = {
@@ -175,6 +178,7 @@ Bubble.propTypes = {
   touchableProps: PropTypes.object,
   renderCustomView: PropTypes.func,
   statusStyle: Text.propTypes.style,
+  showTime: PropTypes.bool,
 };
 
 const styles = {
@@ -237,7 +241,10 @@ const styles = {
   bottomContainerStyle: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingRight: 10,
+    borderRadius: 13,
+    overflow: 'hidden',  //使得超出borderRadius部分隐藏
+    marginRight: 5,
+    marginLeft: 5,
   },
   statusViewStyle: {
     flexDirection: 'row',

@@ -59,6 +59,18 @@ const styles = {
   }),
 };
 
+const containerStyle = {
+  marginLeft: 10,
+  marginRight: 10,
+  marginBottom: 5,
+};
+
+const textStyle = {
+  fontSize: 6,
+  backgroundColor: 'transparent',
+  textAlign: 'right',
+};
+
 Time.defaultProps = {
   position: 'left',
   containerStyle: {},
@@ -81,16 +93,6 @@ Time.propTypes = {
   currentMessage: PropTypes.object,
 };
 
-const containerStyle = {
-  marginLeft: 10,
-  marginRight: 10,
-  marginBottom: 5,
-};
 
-const textStyle = {
-  fontSize: 10,
-  backgroundColor: 'transparent',
-  textAlign: 'right',
-};
 
 module.exports = Time;

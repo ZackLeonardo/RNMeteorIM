@@ -134,6 +134,7 @@ const styles = {
     containerStyle: {
       paddingTop: 3,
       borderRadius: 13,
+      paddingBottom: 3,
     },
     textStyle: {
       margin: 3,
@@ -152,6 +153,7 @@ const styles = {
     containerStyle: {
       paddingTop: 3,
       borderRadius: 13,
+      paddingBottom: 3,
     },
     textStyle: {
       margin: 3,
