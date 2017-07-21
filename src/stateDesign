@@ -1,5 +1,6 @@
 {
   selectedRoomId: ObjectID("B")',
+  myId: ObjectID("B")',
   entities: {
     users: {
       2: {

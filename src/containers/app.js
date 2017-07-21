@@ -28,30 +28,73 @@ export default class App extends Component {
   constructor(props) {
    super(props);
    this.state = {
-      messages: [
+      messages: {
+        1 :
         {text: 'China', userId: '1', createdAt: '1995-12-25 10:00:00',
           sent: true,},
-        {text: 'India', userId: '2', createdAt: '1995-12-25 10:02:00',sent: true,},
-        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:06:00'},
-        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:10:00'},
-        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:12:00'},
-        {text: 'China', userId: '1', createdAt: '1995-12-25 10:16:00'},
-        {text: 'India', userId: '2', createdAt: '1995-12-25 10:20:00'},
-        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:30:00'},
-        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:33:00'},
-        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:35:00'},
-        {text: 'China', userId: '1', createdAt: '1995-12-25 10:38:00'},
-        {text: 'India', userId: '2', createdAt: '1995-12-25 10:38:00'},
-        {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:40:00'},
-        {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:50:00'},
-        {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:59:00'}
+        2 : {text: 'IndiaRRR', userId: '2', createdAt: '1995-12-25 10:02:00',sent: true,},
+        3 : {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:06:00'},
+        4 : {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:10:00'},
+        5 : {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:12:00'},
+        6 : {text: 'China', userId: '1', createdAt: '1995-12-25 10:16:00'},
+        7 : {text: 'India', userId: '2', createdAt: '1995-12-25 10:20:00'},
+        8 : {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:30:00'},
+        9 : {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:33:00'},
+        10 : {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:35:00'},
+        11 : {text: 'China', userId: '1', createdAt: '1995-12-25 10:38:00'},
+        12 : {text: 'India', userId: '2', createdAt: '1995-12-25 10:38:00'},
+        13 : {text: 'U.S.A.', userId: '3', createdAt: '1995-12-25 10:40:00'},
+        14 : {text: 'Indonesia', userId: '4', createdAt: '1995-12-25 10:50:00'},
+        15 : {text: 'Brazil', userId: '5', createdAt: '1995-12-25 10:59:00'}
 
-      ],
-      user: {
-        id: '1',
-        avatar: 'https://facebook.github.io/react/img/logo_og.png'
+      },
+      users: {
+        1: {
+          id: '1',
+          avatar: 'https://facebook.github.io/react/img/logo_og.png'
+        },
+        2: {
+          id: '2',
+          avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
+        },
+        3: {
+          id: '3',
+          avatar: 'https://img1.doubanio.com/img/fmadmin/large/873609.jpg'
+        },
+        4: {
+          id: '4',
+          avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
+        },
+        5: {
+          id: '5',
+          avatar: 'https://img3.doubanio.com/img/fmadmin/large/882261.jpg'
+        }
+      },
+
+      // users: [
+      //   {
+      //     id: '1',
+      //     avatar: 'https://facebook.github.io/react/img/logo_og.png'
+      //   },
+      //   {
+      //     id: '2',
+      //     avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
+      //   },
+      //   {
+      //     id: '3',
+      //     avatar: 'https://facebook.github.io/react/img/logo_og.png'
+      //   },
+      //   {
+      //     id: '4',
+      //     avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
+      //   },
+      //   {
+      //     id: '5',
+      //     avatar: 'https://facebook.github.io/react/img/logo_og.png'
+      //   }],
+        myId: '1',
       }
-   };
+
   }
 
   render(){
@@ -59,7 +102,8 @@ export default class App extends Component {
       <View style={styles.thisView}>
         <MessageList
           messages={this.state.messages}
-          user = {this.state.user}
+          users = {this.state.users}
+          myId = {this.state.myId}
         />
       </View>
     );

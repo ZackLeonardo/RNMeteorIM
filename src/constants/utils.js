@@ -37,6 +37,10 @@ import I18n from 'react-native-i18n';
 
  };
 
+ export function isSameUser(message, myId){
+   return message.userId === myId;
+ };
+
  export function warnDeprecated(fn) {
 
    return (...args) => {
@@ -61,3 +65,17 @@ import I18n from 'react-native-i18n';
    }
    return theLocale;
  };
+
+
+export function isJson(obj){
+  var isjson = typeof(obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
+    return isjson;
+ };
+
+ export function array2MapById(array){
+   var mapTmp = new Map();
+   for (let i = 0 ; i < array.length; i++){
+     mapTmp.set(array[i].id, array[i]);
+   }
+   return mapTmp;
+ }
