@@ -14,12 +14,4 @@ import {
 
 import App from './src/containers/app';
 
-export default class RNMeteorIM extends Component {
-    render() {
-        return (
-            <App />
-        );
-    }
-};
-
-AppRegistry.registerComponent('RNMeteorIM', () => RNMeteorIM);
+AppRegistry.registerComponent('RNMeteorIM', () => App);

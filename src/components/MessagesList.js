@@ -19,17 +19,16 @@
  import Message from './Message';
  import { isJson, isSameUser, array2MapById } from '../constants/utils'
 
- class MessageList extends Component {
+ class MessagesList extends Component {
 
    constructor(props){
      super(props);
      this.renderRow = this.renderRow.bind(this);
 
-     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-     this.state = {
-            dataSource: ds.cloneWithRows(this.props.messages),
-
-        }
+    //  const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    //  this.state = {
+    //         dataSource: ds.cloneWithRows(this.props.messages),
+    //     }
      var timeShowed;
      var userMapTmp;
    }
@@ -37,6 +36,10 @@
    componentWillMount(){
      // 判断users的类型，如果是array则转换成map
      this.userMapTmp = this.initUsersInfo(this.props.users);
+   }
+
+   componentWillUpdate(){
+     this.timeShowed = null; // 组件更新时，重置使得日期显示正常
    }
 
    //初始化users信息，统一成Map格式，key为id
@@ -49,6 +52,9 @@
    }
 
    render(){
+     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+     var dataSource = ds.cloneWithRows(this.props.messages);
+
      return (
        <View>
         <ListView
@@ -57,7 +63,7 @@
           initialListSize = { 20 }
           pageSize = { 20 }
 
-          dataSource = {this.state.dataSource}
+          dataSource = {dataSource}
 
           renderRow = {this.renderRow}
 
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
  },
 });
 
-MessageList.defaultProps = {
+MessagesList.defaultProps = {
   listRowStyle: {},
   timeShowInterval: 10,
   users: {},
@@ -123,7 +129,7 @@ MessageList.defaultProps = {
   myId: null,
 }
 
-MessageList.propTypes = {
+MessagesList.propTypes = {
  listRowStyle: ViewPropTypes.style,
  timeShowInterval: PropTypes.number,
  users: PropTypes.object,
@@ -132,4 +138,4 @@ MessageList.propTypes = {
 }
 
 
-module.exports = MessageList;
+module.exports = MessagesList;

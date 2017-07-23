@@ -1,6 +1,6 @@
 /**
  * React Native IM App with DDP(Meteor)
- * the container which shwo messages in ListView
+ * the container which show messages in ListView
  *
  * @zack
  */
@@ -8,11 +8,10 @@ import React, { Component } from 'react';
 import {
   View,
   ViewPropTypes,
-  ListView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-class MessageContainer extends Component{
+class MessagesListContainer extends Component{
   constructor(props){
     super(props);
 
