@@ -16,7 +16,8 @@
 		"react-native-meteor": "^1.1.0",
 		"react-native-parsed-text": "0.0.18",
 		"react-redux": "^5.0.5",
-		"redux": "^3.7.2"
+		"redux": "^3.7.2",
+		"redux-saga": "^0.15.6"
 	},
 	"devDependencies": {
 		"babel-jest": "20.0.3",

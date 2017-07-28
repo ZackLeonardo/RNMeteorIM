@@ -27,20 +27,32 @@ import MessagesList from '../components/MessagesList';
 import { connect } from 'react-redux';
 import * as actions from '../actions/messages';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 import messages from '../reducers/messages';
+import rootSaga from '../sagas/messages';
 import MessagesListContainer from './MessagesListContainer';
 
-const store = createStore(messages);
+const sagaMiddleware = createSagaMiddleware()
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <MyApp />
-    </Provider>
-  );
-}
+const store = createStore(
+  messages,
+  applyMiddleware(sagaMiddleware)
+)
+
+// const createStoreWithMiddleware = applyMiddleware(sagaMiddleware)(createStore)
+//
+// const store = createStoreWithMiddleware(messages)
+
+const App = () => (
+  <Provider store={store}>
+    <MyApp />
+  </Provider>
+)
+
+
+sagaMiddleware.run(rootSaga)
 
 const MyApp = connect(
   state => ({
@@ -49,10 +61,11 @@ const MyApp = connect(
     myId: state.myId,
     // state
   }),
-  dispatch => ({
-    addMessage: message => dispatch(actions.addMessage(message)),
-
-  })
+  actions
+  // dispatch => ({
+  //   addMessage: message => dispatch(actions.addMessage(message)),
+  //
+  // })
 )(MessagesListContainer)
 
 module.exports = App;

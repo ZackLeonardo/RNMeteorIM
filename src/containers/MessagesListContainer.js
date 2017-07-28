@@ -26,12 +26,12 @@ class MessagesListContainer extends Component{
   }
 
   render(){
-    const { dispatch, messages, users, myId, addMessage } = this.props;
+    const {  messages, users, myId, addMessage } = this.props;
     return (
       <View >
       <TouchableOpacity
         style={styles.thisView}
-        onPress={() => addMessage({'2' : {id: '2', text: 'IndiaRRR', userId: '1', createdAt: '1995-12-25 10:02:00',sent: true}})}
+        onPress={() => addMessage()}
         accessibilityTraits = "text">
         <Text> push me </Text>
       </TouchableOpacity>
@@ -40,7 +40,6 @@ class MessagesListContainer extends Component{
           users = {users}
           myId = {myId}
         />
-
       </View>
     );
   }
