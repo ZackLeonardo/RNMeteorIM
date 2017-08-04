@@ -48,8 +48,6 @@ class ChatContainer extends Component {
     this.onSend = this.onSend.bind(this);
     this._keyboardWillShow = this._keyboardWillShow.bind(this);
     this._keyboardWillHide = this._keyboardWillHide.bind(this);
-    this._keyboardDidShow = this._keyboardDidShow.bind(this);
-    this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this.onInputTextChanged = this.onInputTextChanged.bind(this);
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
 
@@ -108,24 +106,18 @@ class ChatContainer extends Component {
 
     this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
     this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
   }
 
   componentWillUnmount () {
    this.keyboardDidShowListener.remove();
    this.keyboardWillShowListener.remove();
-   this.keyboardDidHideListener.remove();
-   this.keyboardWillHideListener.remove();
   }
 
   _keyboardWillShow (e) {
     console.log('Keyboard will Show');
     // this.setIsTypingDisabled(true);
-    let keyboardHeight = e.endCoordinates ? e.endCoordinates.height : e.end.height;
-    this.setKeyboardHeight(keyboardHeight);
-    let bottomOffset = this.props.bottomOffset;
-    this.setBottomOffset(bottomOffset);
+    this.setKeyboardHeight(e.endCoordinates ? e.endCoordinates.height : e.end.height);
+    this.setBottomOffset(this.props.bottomOffset);
     const newMessagesListHeight = this.calculateMessagesListHeightWithKeyboard();
     if (this.props.isAnimated === true) {
       Animated.timing(this.state.messagesListHeight, {
@@ -141,7 +133,7 @@ class ChatContainer extends Component {
 
   _keyboardDidShow (e) {
     console.log('Keyboard Shown');
-    this.scrollToEnd();
+
   }
   _keyboardWillHide (e) {
     console.log('Keyboard will Hide');
@@ -160,11 +152,8 @@ class ChatContainer extends Component {
       });
     }
   }
-
-
   _keyboardDidHide (e) {
     console.log('Keyboard Hidden');
-    this.scrollToEnd();
   }
 
   // view 增加accessible，使之成为无障碍功能组件，点击即可隐藏键盘
@@ -174,7 +163,7 @@ class ChatContainer extends Component {
           onLayout={this.onMainViewLayout}
           accessible = {true}
         >
-          {this.renderMessagesList()}
+          {this.renderMessages()}
           {this.renderInputToolbar()}
         </View>
     );
@@ -182,6 +171,7 @@ class ChatContainer extends Component {
 
   onMainViewLayout(e){
     const layout = e.nativeEvent.layout;
+    console.log(`layout is : ${layout.x}, ${layout.y}, ${layout.width}, ${layout.height}`);
     if (this.getMaxHeight() !== layout.height) {
       this.setMaxHeight(layout.height);
       this.setState({
@@ -190,7 +180,7 @@ class ChatContainer extends Component {
     }
   }
 
-  renderMessagesList(){
+  renderMessages(){
     const {  messages, users, myId } = this.props;
     const AnimatedView = this.props.isAnimated === true ? Animated.View : View;
     return (
@@ -199,8 +189,7 @@ class ChatContainer extends Component {
       >
         <MessagesList
           {...this.props}
-          ref = '_messagesListRef'
-          messages = {messages}
+          messages={messages}
           users = {users}
           myId = {myId}
         />
@@ -244,19 +233,10 @@ class ChatContainer extends Component {
     console.log('onContentSizeChange');
     const newComposerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
     const newMessagesListHeight = this.calculateMessagesListHeightWithKeyboard(newComposerHeight);
-
-    if (this.props.isAnimated === true) {
-      Animated.timing(this.state.messagesListHeight, {
-        toValue: newMessagesListHeight,
-        duration: 210,
-      }).start();
-    } else {
-      this.setState({
-        composerHeight: newComposerHeight,
-        messagesListHeight: newMessagesListHeight,
-      });
-    }
-
+    this.setState({
+      composerHeight: newComposerHeight,
+      messagesListHeight: this.prepareMessagesListHeight(newMessagesListHeight),
+    });
   }
 
   onSend(messages = [], shouldResetInputToolbar = false) {
@@ -288,20 +268,6 @@ class ChatContainer extends Component {
     });
   }
 
-  scrollTo(y = 0, animated = true) {
-    console.log('scrollToBottom');
-    if (this.refs._messagesListRef === null) { return }
-    this.refs._messagesListRef.scrollTo({
-      y: y,
-      animated: animated,
-    });
-  }
-
-  scrollToEnd( animated = true ) {
-    if (this.refs._messagesListRef === null) { return }
-    console.log('scrollToEnd');
-    this.refs._messagesListRef.refs._listViewRef.scrollToEnd(animated: animated);
-  }
 
 
 }
