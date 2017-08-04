@@ -32,7 +32,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import messages from '../reducers/messages';
 import rootSaga from '../sagas/messages';
-import MessagesListContainer from './MessagesListContainer';
+import ChatContainer from './ChatContainer';
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -66,6 +66,6 @@ const MyApp = connect(
   //   addMessage: message => dispatch(actions.addMessage(message)),
   //
   // })
-)(MessagesListContainer)
+)(ChatContainer)
 
 module.exports = App;

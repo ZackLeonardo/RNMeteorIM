@@ -51,13 +51,21 @@
      }
    }
 
+   scrollTo(options){
+     this.refs._listViewRef.scrollTo(options);
+   }
+
+   scrollToEnd(options){
+     this.refs._listViewRef.scrollToEnd(options);
+   }
+
    render(){
      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
      var dataSource = ds.cloneWithRows(this.props.messages);
 
      return (
-       <View>
         <ListView
+          ref = '_listViewRef'
           enableEmptySections = { true }
           automaticallyAdjustContentInsets = { false }
           initialListSize = { 20 }
@@ -68,7 +76,6 @@
           renderRow = {this.renderRow}
 
         />
-       </View>
      );
    }
 
