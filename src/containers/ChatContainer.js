@@ -16,11 +16,10 @@ import {
   Dimensions,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import MessagesList from '../components/MessagesList';
+import MessagesList from '../components/MessagesFlatList';
 import InputToolbar from '../components/InputToolbar';
 
 const MIN_COMPOSER_HEIGHT = Platform.select({
@@ -108,6 +107,13 @@ class ChatContainer extends Component {
     this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
   }
 
+  // componentDidMount(){
+  //   console.log('componentDidMount');
+  //   if (this.refs._messagesListRef){
+  //     this.scrollToEnd();
+  //   }
+  // }
+
   componentWillUnmount () {
    this.keyboardDidShowListener.remove();
    this.keyboardWillShowListener.remove();
@@ -120,6 +126,16 @@ class ChatContainer extends Component {
     this.setBottomOffset(this.props.bottomOffset);
     const newMessagesListHeight = this.calculateMessagesListHeightWithKeyboard();
     if (this.props.isAnimated === true) {
+      // Animated.parallel([
+      //   Animated.timing(this.state.messagesListHeight, {
+      //     toValue: newMessagesListHeight,
+      //     duration: 210,
+      //   }).start();
+      //   Animated.timing(this.imageHeight, {
+      //     duration: event.duration,
+      //     toValue: IMAGE_HEIGHT_SMALL,
+      //   }),
+      // ]).start();
       Animated.timing(this.state.messagesListHeight, {
         toValue: newMessagesListHeight,
         duration: 210,
@@ -170,8 +186,9 @@ class ChatContainer extends Component {
   }
 
   onMainViewLayout(e){
+    console.log('onMainViewLayout');
     const layout = e.nativeEvent.layout;
-    console.log(`layout is : ${layout.x}, ${layout.y}, ${layout.width}, ${layout.height}`);
+    // console.log(`layout is : ${layout.x}, ${layout.y}, ${layout.width}, ${layout.height}`)
     if (this.getMaxHeight() !== layout.height) {
       this.setMaxHeight(layout.height);
       this.setState({
@@ -187,7 +204,7 @@ class ChatContainer extends Component {
       <AnimatedView
         style = {{height: this.state.messagesListHeight}}
       >
-        <MessagesList
+        <MessagesList ref='messagesListRef'
           {...this.props}
           messages={messages}
           users = {users}
@@ -230,7 +247,6 @@ class ChatContainer extends Component {
   }
 
   onContentSizeChange(size){
-    console.log('onContentSizeChange');
     const newComposerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
     const newMessagesListHeight = this.calculateMessagesListHeightWithKeyboard(newComposerHeight);
     this.setState({
@@ -268,7 +284,11 @@ class ChatContainer extends Component {
     });
   }
 
-
+  scrollToEnd( animated = true ) {
+    if (this.refs.messagesListRef ===null) { return }
+    console.log('scrollToEnd');
+    this.refs.messagesListRef.scrollToEnd(animated: animated);
+  }
 
 }
 

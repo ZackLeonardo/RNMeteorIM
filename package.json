@@ -11,6 +11,7 @@
 		"prop-types": "^15.5.10",
 		"react": "^16.0.0-alpha.12",
 		"react-native": "^0.46.2",
+		"react-native-elements": "^0.15.0",
 		"react-native-i18n": "^2.0.2",
 		"react-native-lightbox": "^0.6.0",
 		"react-native-meteor": "^1.1.0",

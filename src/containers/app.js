@@ -22,7 +22,7 @@ import {
 // import Bubble from '../components/Bubble';
 // import Message from '../components/Message';
 // import Meteor, { createContainer } from 'react-native-meteor';
-import MessagesList from '../components/MessagesList';
+import MessagesList from '../components/MessagesFlatList';
 
 import { connect } from 'react-redux';
 import * as actions from '../actions/messages';

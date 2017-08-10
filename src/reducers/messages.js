@@ -1,12 +1,22 @@
 import * as types from '../constants/ActionTypes';
 
 const initialState = {
+  //  users: [
+  //   {
+  //     id: '1',
+  //     avatar: 'https://facebook.github.io/react/img/logo_og.png'
+  //   },
+  //   {
+  //     id: '2',
+  //     avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
+  //   },
+  // ],
    users: {
-     1: {
+     '1': {
        id: '1',
        avatar: 'https://facebook.github.io/react/img/logo_og.png'
      },
-     2: {
+     '2': {
        id: '2',
        avatar: 'https://img3.doubanio.com/img/fmadmin/large/1518146.jpg'
      }

@@ -78,4 +78,12 @@ export function isJson(obj){
      mapTmp.set(array[i].id, array[i]);
    }
    return mapTmp;
- }
+ };
+
+ export function json2Array(json){
+   var arrayTmp = new Array();
+   for (var item in json){
+     arrayTmp.push(json[item]);
+   }
+   return arrayTmp;
+ };
