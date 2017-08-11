@@ -16,9 +16,23 @@ import {
 import PropTypes from 'prop-types';
 
 class Composer extends Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text: '',
+      composerHeight: Platform.select({
+        ios: 33,
+        android: 41,
+      }),
+    };
+  }
+
+  // value有两种赋值方式，一种是从props中获取，意味着上层组件很可能会re-render，一种是从state中获取，上层组件通过ref方式调用setText方法
   render(){
     return (
       <TextInput
+        ref = 'inputTextRef'
         placeholder={this.props.placeholder}
         placeholderTextColor={this.props.placeholderTextColor}
         multiline={this.props.multiline}
@@ -26,9 +40,9 @@ class Composer extends Component{
         onContentSizeChange={(e) => this.onContentSizeChange(e)}
         onChangeText={text => this.onChangeText(text)}
 
-        style={[styles.textInputStyle, this.props.textInputStyle, {height: this.props.composerHeight}]}
+        style={[styles.textInputStyle, this.props.textInputStyle, {height: this.props.composerHeight ? this.props.composerHeight : this.state.composerHeight}]}
 
-        value={this.props.text}
+        value={this.props.text ? this.props.text : this.state.text}
         accessibilityLabel={this.props.text || this.props.placeholder}
         enablesReturnKeyAutomatically={true}
         underlineColorAndroid="transparent"
@@ -51,6 +65,18 @@ class Composer extends Component{
 
   onChangeText(text) {
     this.props.onTextChanged(text);
+  }
+
+  setText(text) {
+    this.setState({
+      text: text,
+    });
+  }
+
+  setComposerHeight(height) {
+    this.setState({
+      composerHeight: height,
+    });
   }
 
 }
@@ -80,10 +106,7 @@ Composer.defaultProps = {
   onContentSizeChange: () => {},
   onTextChanged: () => {},
   textInputStyle: {},
-  composerHeight: Platform.select({
-    ios: 33,
-    android: 41,
-  }),
+  composerHeight: null,
   text: '',
   textInputProps: null,
 };

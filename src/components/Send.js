@@ -17,20 +17,17 @@ import PropTypes from 'prop-types';
 
 class Send extends Component{
   render() {
-    if (this.props.text.trim().length > 0) {
-      return (
-        <TouchableOpacity
-          style={[styles.containerStyle, this.props.containerStyle]}
-          onPress={() => {
-            this.props.onSend({text: this.props.text.trim()}, true);
-          }}
-          accessibilityTraits='button'
-        >
-          <Text style={[styles.textStyle, this.props.textStyle]}>{this.props.label}</Text>
-        </TouchableOpacity>
-      );
-    }
-    return <View/>;
+    return (
+      <TouchableOpacity
+        style={[styles.containerStyle, this.props.containerStyle]}
+        onPress={() => {
+          this.props.onSend({text: this.props.text.trim()}, true);
+        }}
+        accessibilityTraits='button'
+      >
+        <Text style={[styles.textStyle, this.props.textStyle]}>{this.props.label}</Text>
+      </TouchableOpacity>
+    );
   }
 }
 

@@ -38,13 +38,23 @@
    }
 
    componentDidMount(){
-     console.log('componentDidMount');
-     this.autoScroll();
+     //FlatList Component Life Cycle Methods ScrollToIndex ScrollToEnd etc
+     // https://stackoverflow.com/questions/43856264/flatlist-component-life-cycle-methods-scrolltoindex-scrolltoend-etc
+     let wait = new Promise((resolve) => setTimeout(resolve, 500));  // Smaller number should work
+     wait.then( () => {
+       this.autoScroll();
+     });
    }
 
    componentDidUpdate(){
-     console.log('componentDidUpdate');
      this.autoScroll();
+   }
+
+   shouldComponentUpdate(){
+     if () {
+       return false;
+     }
+     return true;
    }
 
    //初始化users信息，统一成Map格式，key为id
@@ -62,7 +72,6 @@
   //   }
 
    autoScroll() {
-     console.log('autoScroll');
     if (this.refs.flatListRef) {
       // this.refs.flatListRef.scrollToOffset({animated: true, offset: 44});
       this.refs.flatListRef.scrollToEnd({animated: false});
@@ -74,7 +83,6 @@
    }
 
    scrollToEnd(options){
-     console.log('flatListRef scrollToEnd');
      this.refs.flatListRef.scrollToEnd(options);
    }
 
@@ -88,7 +96,6 @@
             renderItem = {({item, index}) => this.renderItem(item, index)}
             keyExtractor={item => item.id}
             initialNumToRender = {20}
-
           />
        );
      }
@@ -104,7 +111,7 @@
        showDate: this.ShowDate(item),
        user: this.findMessageUser(item),
      };
-     console.log('index is :' + index);
+    //  console.log('index is :' + index);
      return (
        <View style={[styles.listRowStyle, this.props.listRowStyle]}>
           <Message {...messageProps}/>

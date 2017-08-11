@@ -17,14 +17,6 @@
  import Actions from './Actions';
 
  class InputToolbar extends Component {
-   componentDidMount(){
-     console.log('InputToolbar componentDidMount');
-
-   }
-
-   componentDidUpdate(){
-     console.log('InputToolbar componentDidUpdate');
-   }
 
    renderActions() {
      if (this.props.renderActions) {
@@ -39,14 +31,22 @@
      if (this.props.renderSend) {
        return this.props.renderSend(this.props);
      }
-     return <Send {...this.props}/>;
+     return (
+       <Send
+         {...this.props}
+       />
+     );
    }
 
    renderComposer() {
      if (this.props.renderComposer) {
        return this.props.renderComposer(this.props);
      }
-     return <Composer {...this.props}/>;
+     return (
+       <Composer
+          ref = 'composerRef'
+          {...this.props}
+       />);
    }
 
    renderAccessory() {
@@ -86,7 +86,7 @@
      alignItems: 'flex-end',
    },
    accessory: {
-     height: 44,
+     height: 31,
    },
  });
 
