@@ -17,7 +17,7 @@
  import moment from 'moment/min/moment-with-locales.min';
 
  import Message from './Message';
- import { isJson, isSameUser, array2MapById, json2Array } from '../constants/utils'
+ import { isJson, isSameUser, array2MapById, json2Array, shallowEqual } from '../constants/utils'
 
  class MessagesList extends Component {
 
@@ -50,11 +50,14 @@
      this.autoScroll();
    }
 
-   shouldComponentUpdate(){
-     if () {
-       return false;
+   shouldComponentUpdate(nextProps, nextState){
+     if (!shallowEqual(this.props, nextProps)) {
+       return true;
      }
-     return true;
+     if (!shallowEqual(this.state, nextState)) {
+       return true;
+     }
+     return false;
    }
 
    //初始化users信息，统一成Map格式，key为id
@@ -103,6 +106,7 @@
    }
 
    renderItem(item, index){
+     console.log('MessagesFlatList renderItem');
      const messageProps = {
        ...this.props,
        currentMessage: item,

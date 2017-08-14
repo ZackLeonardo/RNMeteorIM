@@ -21,7 +21,7 @@ class Send extends Component{
       <TouchableOpacity
         style={[styles.containerStyle, this.props.containerStyle]}
         onPress={() => {
-          this.props.onSend({text: this.props.text.trim()}, true);
+          this.props.onSend();
         }}
         accessibilityTraits='button'
       >

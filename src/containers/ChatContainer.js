@@ -36,19 +36,23 @@ class ChatContainer extends Component {
     this._keyboardHeight = null;
     this._bottomOffset = null;
     this._composerHeight = MIN_COMPOSER_HEIGHT;
+    this._messagesListTopOffset = 0;
+    this._text = '';
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
       messagesListHeight: null,
       messagesListTopOffset: this.prepareMessagesListTopOffset(0),
-      typingDisabled: false
+      typingDisabled: false,
     };
 
-    this.onSend = this.onSend.bind(this);
     this._keyboardWillShow = this._keyboardWillShow.bind(this);
     this._keyboardWillHide = this._keyboardWillHide.bind(this);
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this.onInputTextChanged = this.onInputTextChanged.bind(this);
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
+    this.onSend = this.onSend.bind(this);
 
   }
 
@@ -63,20 +67,35 @@ class ChatContainer extends Component {
 
     this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
     this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
   }
 
   componentWillUnmount () {
    this.keyboardDidShowListener.remove();
    this.keyboardWillShowListener.remove();
+   this.keyboardDidHideListener.remove();
+   this.keyboardWillHideListener.remove();
+  }
+
+  setIsTypingDisabled(value) {
+    this.setState({
+      typingDisabled: value
+    });
+  }
+
+  getIsTypingDisabled() {
+    return this.state.typingDisabled;
   }
 
   // 采用设置marginTop的方式而不是改变flatList的height
   _keyboardWillShow (e) {
+    this.setIsTypingDisabled(true);
     console.log('Keyboard will Show');
     // this.setIsTypingDisabled(true);
     this.setKeyboardHeight(e.endCoordinates ? e.endCoordinates.height : e.end.height);
     this.setBottomOffset(this.props.bottomOffset);
-    const newMessagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard();
+    this._messagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard();
     if (this.props.isAnimated === true) {
       // Animated.parallel([
       //   Animated.timing(this.state.messagesListHeight, {
@@ -89,39 +108,47 @@ class ChatContainer extends Component {
       //   }),
       // ]).start();
       Animated.timing(this.state.messagesListTopOffset, {
-        toValue: newMessagesListTopOffset,
+        toValue: this._messagesListTopOffset,
         duration: 210,
       }).start();
     } else {
       this.setState({
-        messagesListTopOffset: newMessagesListTopOffset,
+        messagesListTopOffset: this._messagesListTopOffset,
       });
     }
   }
 
   _keyboardDidShow (e) {
     console.log('Keyboard Shown');
-
+    if (Platform.OS === 'android') {
+      this._keyboardWillShow(e);
+    }
+    this.setIsTypingDisabled(false);
   }
   _keyboardWillHide (e) {
+    this.setIsTypingDisabled(true);
     console.log('Keyboard will Hide');
     // this.setIsTypingDisabled(true);
     this.setKeyboardHeight(0);
     this.setBottomOffset(0);
-    const newMessagesListTopOffset = 0;
+    this._messagesListTopOffset = 0;
     if (this.props.isAnimated === true) {
       Animated.timing(this.state.messagesListTopOffset, {
-        toValue: newMessagesListTopOffset,
+        toValue: this._messagesListTopOffset,
         duration: 210,
       }).start();
     } else {
       this.setState({
-        messagesListTopOffset: newMessagesListTopOffset,
+        messagesListTopOffset: this._messagesListTopOffset,
       });
     }
   }
   _keyboardDidHide (e) {
     console.log('Keyboard Hidden');
+    if (Platform.OS === 'android') {
+      this._keyboardWillHide(e);
+    }
+    this.setIsTypingDisabled(false);
   }
 
   setMaxHeight(height) {
@@ -188,7 +215,7 @@ class ChatContainer extends Component {
   // }
 
   renderMessages(){
-    console.log('renderMessages:' + this.state.messagesListTopOffset);
+    console.log('ChatContainer renderMessages');
     const {  messages, users, myId } = this.props;
     const AnimatedView = this.props.isAnimated === true ? Animated.View : View;
     return (
@@ -212,13 +239,13 @@ class ChatContainer extends Component {
       //这里facebook已经正确处理了onContentSizeChange（先）和onTextChanged（后）回调的顺序
       onTextChanged: this.onInputTextChanged,
       onContentSizeChange: this.onContentSizeChange,
-
       onSend: this.onSend,
 
 
 
       textInputProps: {
         ...this.props.textInputProps,
+        ref: textInput => this.textInput = textInput,
       }
     };
     return (
@@ -230,70 +257,75 @@ class ChatContainer extends Component {
   }
 
   onInputTextChanged(text) {
-    console.log('onInputTextChanged');
+    console.log('onInputTextChanged1:' + this._text);
+    if (this.getIsTypingDisabled()) {
+      return;
+    }
     if (this.props.onInputTextChanged) {
       this.props.onInputTextChanged(text);
     }
-    // 不使用setState方式，避免每次都re-render，而多次加载MessagesList
+    // 不使用setState方式，避免每次都re-render，而多次加载MessagesList，如果使用setState，需要在组件shouldComponentUpdate方法中判定是否变化。但是如果事件频率发生过快，也会有：Native TextInput(I have to go to the gym and ) is 4 events ahead of JS - try to make your JS faster.的警告。
     // this.setState({text});
     this.refs.inputToolbarRef.refs.composerRef.setText(text);
+    this._text = text;
+    console.log('onInputTextChanged2:' + this._text);
   }
 
   onContentSizeChange(size){
     this._composerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
     console.log('onContentSizeChange:' + this._composerHeight);
-    var newMessagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard(this._composerHeight);
+    this._messagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard(this._composerHeight);
 
     // 不使用setState方法，不re-render
-    // if (newComposerHeight !== this._composerHeight) {
-    //   console.log('newComposerHeight:' + newComposerHeight);
-    //   this.setState({
-    //     composerHeight: newComposerHeight,
-    //   });
-    // }
-    //
+    // this.setState({
+    //   composerHeight: this._composerHeight,
+    // });
     this.refs.inputToolbarRef.refs.composerRef.setComposerHeight(this._composerHeight);
 
-
-    if (newMessagesListTopOffset !== this.state.messagesListTopOffset._value) {
-      console.log('newMessagesListTopOffset:' + newMessagesListTopOffset);
+    if (this._messagesListTopOffset !== this.state.messagesListTopOffset._value) {
+      console.log('this._messagesListTopOffset:' + this._messagesListTopOffset);
       this.setState({
-        messagesListTopOffset: this.prepareMessagesListTopOffset(newMessagesListTopOffset),
+        messagesListTopOffset: this.prepareMessagesListTopOffset(this._messagesListTopOffset),
       });
     }
-
-    // this.scrollToEnd();
   }
 
-  onSend(messages = [], shouldResetInputToolbar = false) {
-    // if (!Array.isArray(messages)) {
-    //   messages = [messages];
-    // }
-    //
-    // messages = messages.map((message) => {
-    //   return {
-    //     ...message,
-    //     user: this.props.user,
-    //     createdAt: new Date(),
-    //   };
-    // });
-    //
-    // if (shouldResetInputToolbar === true) {
-    //   this.setIsTypingDisabled(true);
-    //   this.resetInputToolbar();
-    // }
+  onSend(text = this._text.trim(), shouldResetInputToolbar = true) {
+    message = {
+        content: text,
+        userId: this.props.myId,
+        createdAt: new Date(),
+    };
+
+    if (shouldResetInputToolbar === true) {
+      this.setIsTypingDisabled(true);
+      this.resetInputToolbar();
+    }
+
+    console.log('send messages is : ' + JSON.stringify(message));
+    this.props.onSend(message);
     this.scrollToEnd();
+
+    if (shouldResetInputToolbar === true) {
+      setTimeout(() => {
+        this.setIsTypingDisabled(false);
+      }, 100);
+    }
   }
 
   resetInputToolbar() {
-
-  }
-
-  setIsTypingDisabled(value) {
+    if (this.textInput) {
+      this.textInput.clear();
+    }
+    this._composerHeight = MIN_COMPOSER_HEIGHT;
+    this._messagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard(this._composerHeight);
     this.setState({
-      typingDisabled: value
+      composerHeight: this._composerHeight,
+      messagesListTopOffset: this.prepareMessagesListTopOffset(this._messagesListTopOffset),
     });
   }
+
+
 
   scrollToEnd( animated = false ) {
     if (this.refs.messagesListRef ===null) { return }
@@ -318,7 +350,7 @@ ChatContainer.defaultProps = {
   layoutHeight: null,
   bottomOffset: 0,
   onInputTextChanged: () => {},
-
+  onSend: () => {},
 };
 
 ChatContainer.propTypes = {
@@ -327,6 +359,7 @@ ChatContainer.propTypes = {
   layoutHeight: PropTypes.number,  //从外层将该参数传递进来，不然会先render，再触发onMainViewLayout，会有闪现；个人认为从该组件解决此问题不如从外部解决,组件内部解决的方案是从下面闪现感觉不到。
   bottomOffset: PropTypes.number,
   onInputTextChanged: PropTypes.func,
+  onSend: PropTypes.func,
 };
 
 module.exports = ChatContainer;
