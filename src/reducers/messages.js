@@ -23,6 +23,7 @@ const initialState = {
    },
 
    myId: '1',
+   roomId: 'TR2CwAfnwmr6kvWa4',
    messages: {
      "1":{"id":"1","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
      "2":{"id":"2","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},

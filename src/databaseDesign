@@ -25,9 +25,9 @@ room信息:rooms
 message信息:messages
 {
   id: 1,
-  content: 'Confusion about Flux and Relay',
+  text: 'Confusion about Flux and Relay',
   date: '',
-  room: ObjectID("B"),
-  user: ObjectID("B"),
+  roomId: ObjectID("B"),
+  userId: ObjectID("B"),
   status: 'read'
 }

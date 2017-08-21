@@ -16,8 +16,11 @@ import {
   Dimensions,
   Keyboard,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
+
+import Meteor, { createContainer } from 'react-native-meteor';
 
 import MessagesList from '../components/MessagesFlatList';
 import InputToolbar from '../components/InputToolbar';
@@ -292,8 +295,9 @@ class ChatContainer extends Component {
 
   onSend(text = this._text.trim(), shouldResetInputToolbar = true) {
     message = {
-        content: text,
+        text: text,
         userId: this.props.myId,
+        roomId: this.props.roomId,
         createdAt: new Date(),
     };
 
@@ -302,8 +306,38 @@ class ChatContainer extends Component {
       this.resetInputToolbar();
     }
 
-    console.log('send messages is : ' + JSON.stringify(message));
-    this.props.onSend(message);
+    // console.log('send messages is : ' + JSON.stringify(message));
+    // this.props.onSend(message);
+    Meteor.call('Messages.addOne', {message: message}, (err, content) => {
+      if (err) {
+        console.log('err: ' + err.reason);
+        // 如果使用alert，会导致TextInput失去焦点，重新获取焦点比较繁琐；可以将message的状态显示为错误，点击可以重发。
+        // this.setState({ error: err.reason });
+        // Alert.alert(
+        //   'Failed',
+        //   'Message Send Failed!',
+        //   [
+        //     {
+        //       text: 'Cancel', onPress: () => {
+        //         console.log('Cancel Pressed')
+        //       },
+        //       style: 'cancel'
+        //     },
+        //     {
+        //       text: 'resend', onPress: () => {
+        //         console.log('resend pressed');
+        //       }
+        //     },
+        //   ],
+        //   { cancelable: false }
+        // )
+      } else {
+        // this.setState({ message: content });
+        console.log('message send: ' + content.toString());
+      }
+    });
+
+    // this.props.addMessageAsync(message);//{'20' : {id: '20', text: 'IndiaRRR', userId: '1', createdAt: '1995-12-25 10:02:00',sent: true}}
     this.scrollToEnd();
 
     if (shouldResetInputToolbar === true) {
@@ -335,6 +369,8 @@ class ChatContainer extends Component {
 
 }
 
+export default createContainer(params=>{}, ChatContainer);
+
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
@@ -351,6 +387,8 @@ ChatContainer.defaultProps = {
   bottomOffset: 0,
   onInputTextChanged: () => {},
   onSend: () => {},
+  myId: null,
+  roomId: null,
 };
 
 ChatContainer.propTypes = {
@@ -360,6 +398,8 @@ ChatContainer.propTypes = {
   bottomOffset: PropTypes.number,
   onInputTextChanged: PropTypes.func,
   onSend: PropTypes.func,
+  myId: PropTypes.string,
+  roomId: PropTypes.string,
 };
 
 module.exports = ChatContainer;

@@ -34,6 +34,10 @@ import messages from '../reducers/messages';
 import rootSaga from '../sagas/messages';
 import ChatContainer from './ChatContainer';
 
+import Meteor, { createContainer } from 'react-native-meteor';
+
+Meteor.connect('ws://localhost:3000/websocket');
+
 const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
@@ -51,7 +55,6 @@ const App = () => (
   </Provider>
 )
 
-
 sagaMiddleware.run(rootSaga)
 
 const MyApp = connect(
@@ -59,11 +62,12 @@ const MyApp = connect(
     messages: state.messages,
     users: state.users,
     myId: state.myId,
+    roomId: state.roomId,
     // state
   }),
   actions
   // dispatch => ({
-  //   addMessage: message => dispatch(actions.addMessage(message)),
+  //   addMessageAsync: message => dispatch(actions.addMessage(message)),
   //
   // })
 )(ChatContainer)
