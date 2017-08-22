@@ -25,25 +25,25 @@ const initialState = {
    myId: '1',
    roomId: '134fb7f0-86df-11e7-8347-f14dca35fc33',
    messages: {
-     "1":{"id":"1","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "2":{"id":"2","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "3":{"id":"3","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "4":{"id":"4","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "5":{"id":"5","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "6":{"id":"6","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "7":{"id":"7","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "8":{"id":"8","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "9":{"id":"9","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "10":{"id":"10","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "11":{"id":"11","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "12":{"id":"12","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "13":{"id":"13","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "14":{"id":"14","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "15":{"id":"15","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "16":{"id":"16","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
-     "17":{"id":"17","text":"end","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
+     "1":{"id":"1","text":"hello","userId":"2","createdAt":"2017-08-08 10:00:00","sent":true},
+     "2":{"id":"2","text":"world","userId":"2","createdAt":"2017-08-08 10:01:00","sent":true},
+     "3":{"id":"3","text":"hello","userId":"1","createdAt":"2017-08-08 10:03:00","sent":true},
+     "4":{"id":"4","text":"hello","userId":"2","createdAt":"2017-08-08 10:06:00","sent":true},
+     "5":{"id":"5","text":"hello","userId":"1","createdAt":"2017-08-08 10:09:00","sent":true},
+     "6":{"id":"6","text":"hello","userId":"2","createdAt":"2017-08-08 10:10:00","sent":true},
+     "7":{"id":"7","text":"hello","userId":"1","createdAt":"2017-08-08 10:20:00","sent":true},
+     "8":{"id":"8","text":"hello","userId":"1","createdAt":"2017-08-08 10:22:00","sent":true},
+     "9":{"id":"9","text":"hello","userId":"2","createdAt":"2017-08-08 10:26:00","sent":true},
+     "10":{"id":"10","text":"hello","userId":"1","createdAt":"2017-08-08 10:29:00","sent":true},
+     "11":{"id":"11","text":"hello","userId":"2","createdAt":"2017-08-08 10:40:00","sent":true},
+     "12":{"id":"12","text":"hello","userId":"1","createdAt":"2017-08-08 10:41:00","sent":true},
+     "13":{"id":"13","text":"hello","userId":"2","createdAt":"2017-08-08 10:44:00","sent":true},
+     "14":{"id":"14","text":"hello","userId":"1","createdAt":"2017-08-08 10:50:00","sent":true},
+     "15":{"id":"15","text":"hello","userId":"2","createdAt":"2017-08-08 10:52:00","sent":true},
+     "16":{"id":"16","text":"hello","userId":"1","createdAt":"2017-08-08 10:54:00","sent":true},
+     "17":{"id":"17","text":"end","userId":"2","createdAt":"2017-08-08 10:55:00","sent":true},
    }
-  // messages: {"1":{"id":"1","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},"2":{"id":"2","text":"IndiaRRR","userId":"1","createdAt":"1995-12-25 10:02:00","sent":true}}
+  // messages: {"1":{"id":"1","text":"hello","userId":"1","createdAt":"2017-08-08 10:00:00","sent":true},"2":{"id":"2","text":"IndiaRRR","userId":"1","createdAt":"2017-08-08 10:02:00","sent":true}}
 };
 
 export default function messages(state = initialState, action) {
