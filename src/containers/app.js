@@ -25,9 +25,9 @@ import {
 import MessagesList from '../components/MessagesFlatList';
 
 import { connect } from 'react-redux';
-import * as actions from '../actions/messages';
+import * as MessageActions from '../actions/messages';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, bindActionCreators } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import messages from '../reducers/messages';
@@ -57,15 +57,36 @@ const App = () => (
 
 sagaMiddleware.run(rootSaga)
 
+const mapStateToProps = state => ({
+  messages: state.messages,
+  users: state.users,
+  myId: state.myId,
+  roomId: state.roomId,
+})
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(MessageActions, dispatch)
+})
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     addMessage: (message) => {
+//       dispatch(addMessage(message))
+//     }
+//   }
+// }
+
 const MyApp = connect(
-  state => ({
-    messages: state.messages,
-    users: state.users,
-    myId: state.myId,
-    roomId: state.roomId,
-    // state
-  }),
-  actions
+  // state => ({
+  //   messages: state.messages,
+  //   users: state.users,
+  //   myId: state.myId,
+  //   roomId: state.roomId,
+  //   // state
+  // }),
+  mapStateToProps,
+  mapDispatchToProps,
+  // MessageActions,
   // dispatch => ({
   //   addMessageAsync: message => dispatch(actions.addMessage(message)),
   //

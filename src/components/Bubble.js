@@ -120,11 +120,12 @@ class Bubble extends Component{
         return this.props.renderStatus(currentMessage);
     }
 
-    if (currentMessage.sent || currentMessage.received) {
+    if (currentMessage.status) {
       return (
         <View style={styles.statusViewStyle}>
-          {currentMessage.sent && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
-          {currentMessage.received && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
+          {currentMessage.status === 'sent' && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
+          {currentMessage.status === 'received' && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
+          {currentMessage.status === 'sendError' && <Text style={[styles.statusStyle, this.props.statusStyle]}>x</Text>}
         </View>
       )
     }

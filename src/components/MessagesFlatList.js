@@ -77,6 +77,7 @@
    autoScroll() {
     if (this.refs.flatListRef) {
       // this.refs.flatListRef.scrollToOffset({animated: true, offset: 44});
+      console.log('autoScroll');
       this.refs.flatListRef.scrollToEnd({animated: false});
     }
   }
@@ -92,6 +93,7 @@
    render(){
      if (isJson(this.props.messages)) {
        var messagesArray = json2Array(this.props.messages);
+       console.log('MessagesFlatList render');
        return (
           <FlatList
             ref = 'flatListRef'
@@ -106,7 +108,7 @@
    }
 
    renderItem(item, index){
-     console.log('MessagesFlatList renderItem');
+     console.log('MessagesFlatList renderItem:' + item.id);
      const messageProps = {
        ...this.props,
        currentMessage: item,

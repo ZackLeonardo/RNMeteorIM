@@ -23,7 +23,7 @@ const initialState = {
    },
 
    myId: '1',
-   roomId: 'TR2CwAfnwmr6kvWa4',
+   roomId: '134fb7f0-86df-11e7-8347-f14dca35fc33',
    messages: {
      "1":{"id":"1","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
      "2":{"id":"2","text":"China","userId":"1","createdAt":"1995-12-25 10:00:00","sent":true},
@@ -52,8 +52,8 @@ export default function messages(state = initialState, action) {
       if (action.message) {
         var headMessageString = JSON.stringify(state.messages);
         var tailMessageString = JSON.stringify(action.message);
-        console.log('headMessageString:' + headMessageString);
-        console.log('tailMessageString:' + tailMessageString);
+        // console.log('headMessageString:' + headMessageString);
+        // console.log('tailMessageString:' + tailMessageString);
         var messageString = headMessageString.substring(0, headMessageString.length - 1) + ', ' + tailMessageString.substring(1, tailMessageString.length ) ;
         // console.log('messageString:' + messageString);
 

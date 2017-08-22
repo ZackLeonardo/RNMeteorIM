@@ -2,6 +2,7 @@
  * React Native IM App with DDP(Meteor)
  * the chatContainer Component which show messagesList and InputToolbar
  *
+ * this.props.onSend 默认是使用meteor.call
  * @zack
  */
 import React, { Component } from 'react';
@@ -21,7 +22,9 @@ import {
 import PropTypes from 'prop-types';
 
 import Meteor, { createContainer } from 'react-native-meteor';
+import uuid1 from 'uuid/v1';
 
+import { obj2JsonById } from '../constants/utils';
 import MessagesList from '../components/MessagesFlatList';
 import InputToolbar from '../components/InputToolbar';
 
@@ -56,7 +59,7 @@ class ChatContainer extends Component {
     this.onInputTextChanged = this.onInputTextChanged.bind(this);
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
     this.onSend = this.onSend.bind(this);
-
+    this.showSendMessage = this.showSendMessage.bind(this);
   }
 
   // 解决InputToolbar从顶部闪现，重新render在底部问题
@@ -94,8 +97,6 @@ class ChatContainer extends Component {
   // 采用设置marginTop的方式而不是改变flatList的height
   _keyboardWillShow (e) {
     this.setIsTypingDisabled(true);
-    console.log('Keyboard will Show');
-    // this.setIsTypingDisabled(true);
     this.setKeyboardHeight(e.endCoordinates ? e.endCoordinates.height : e.end.height);
     this.setBottomOffset(this.props.bottomOffset);
     this._messagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard();
@@ -122,7 +123,6 @@ class ChatContainer extends Component {
   }
 
   _keyboardDidShow (e) {
-    console.log('Keyboard Shown');
     if (Platform.OS === 'android') {
       this._keyboardWillShow(e);
     }
@@ -130,8 +130,6 @@ class ChatContainer extends Component {
   }
   _keyboardWillHide (e) {
     this.setIsTypingDisabled(true);
-    console.log('Keyboard will Hide');
-    // this.setIsTypingDisabled(true);
     this.setKeyboardHeight(0);
     this.setBottomOffset(0);
     this._messagesListTopOffset = 0;
@@ -147,7 +145,6 @@ class ChatContainer extends Component {
     }
   }
   _keyboardDidHide (e) {
-    console.log('Keyboard Hidden');
     if (Platform.OS === 'android') {
       this._keyboardWillHide(e);
     }
@@ -236,6 +233,7 @@ class ChatContainer extends Component {
   }
 
   renderInputToolbar(){
+    const { addMessage } = this.props;
     const inputToolbarProps = {
       ...this.props,
       // composerHeight: Math.max(MIN_COMPOSER_HEIGHT, this.state.composerHeight),
@@ -260,7 +258,6 @@ class ChatContainer extends Component {
   }
 
   onInputTextChanged(text) {
-    console.log('onInputTextChanged1:' + this._text);
     if (this.getIsTypingDisabled()) {
       return;
     }
@@ -271,12 +268,10 @@ class ChatContainer extends Component {
     // this.setState({text});
     this.refs.inputToolbarRef.refs.composerRef.setText(text);
     this._text = text;
-    console.log('onInputTextChanged2:' + this._text);
   }
 
   onContentSizeChange(size){
     this._composerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
-    console.log('onContentSizeChange:' + this._composerHeight);
     this._messagesListTopOffset = this.calculateMessagesListTopOffsetWithKeyboard(this._composerHeight);
 
     // 不使用setState方法，不re-render
@@ -286,7 +281,6 @@ class ChatContainer extends Component {
     this.refs.inputToolbarRef.refs.composerRef.setComposerHeight(this._composerHeight);
 
     if (this._messagesListTopOffset !== this.state.messagesListTopOffset._value) {
-      console.log('this._messagesListTopOffset:' + this._messagesListTopOffset);
       this.setState({
         messagesListTopOffset: this.prepareMessagesListTopOffset(this._messagesListTopOffset),
       });
@@ -295,10 +289,11 @@ class ChatContainer extends Component {
 
   onSend(text = this._text.trim(), shouldResetInputToolbar = true) {
     message = {
-        text: text,
-        userId: this.props.myId,
-        roomId: this.props.roomId,
-        createdAt: new Date(),
+      id: uuid1(),
+      text: text,
+      userId: this.props.myId,
+      roomId: this.props.roomId,
+      createdAt: new Date(),
     };
 
     if (shouldResetInputToolbar === true) {
@@ -306,39 +301,40 @@ class ChatContainer extends Component {
       this.resetInputToolbar();
     }
 
-    // console.log('send messages is : ' + JSON.stringify(message));
-    // this.props.onSend(message);
-    Meteor.call('Messages.addOne', {message: message}, (err, content) => {
-      if (err) {
-        console.log('err: ' + err.reason);
-        // 如果使用alert，会导致TextInput失去焦点，重新获取焦点比较繁琐；可以将message的状态显示为错误，点击可以重发。
-        // this.setState({ error: err.reason });
-        // Alert.alert(
-        //   'Failed',
-        //   'Message Send Failed!',
-        //   [
-        //     {
-        //       text: 'Cancel', onPress: () => {
-        //         console.log('Cancel Pressed')
-        //       },
-        //       style: 'cancel'
-        //     },
-        //     {
-        //       text: 'resend', onPress: () => {
-        //         console.log('resend pressed');
-        //       }
-        //     },
-        //   ],
-        //   { cancelable: false }
-        // )
-      } else {
-        // this.setState({ message: content });
-        console.log('message send: ' + content.toString());
-      }
-    });
+    if (this.props.onSend) {
+      this.props.onSend(message);
+    } else {
+      Meteor.call('Messages.addOne', message, (err, content) => {
+        if (err) {
+          console.log('err: ' + err.reason);
+          // 如果使用alert，会导致TextInput失去焦点，重新获取焦点比较繁琐；可以将message的状态显示为错误，点击可以重发。
+          this.setState({ error: err.reason });
+          Alert.alert(
+            'Failed',
+            'Message Send Failed!',
+            [
+              {
+                text: 'Cancel', onPress: () => {
+                  console.log('Cancel Pressed')
+                },
+                style: 'cancel'
+              },
+              {
+                text: 'resend', onPress: () => {
+                  console.log('resend pressed');
+                }
+              },
+            ],
+            { cancelable: false }
+          )
 
-    // this.props.addMessageAsync(message);//{'20' : {id: '20', text: 'IndiaRRR', userId: '1', createdAt: '1995-12-25 10:02:00',sent: true}}
-    this.scrollToEnd();
+        } else {
+          this.showSendMessage(message);
+        }
+      });
+    }
+
+    // this.scrollToEnd();
 
     if (shouldResetInputToolbar === true) {
       setTimeout(() => {
@@ -359,12 +355,15 @@ class ChatContainer extends Component {
     });
   }
 
-
-
   scrollToEnd( animated = false ) {
     if (this.refs.messagesListRef ===null) { return }
     console.log('ChatContainer scrollToEnd');
     this.refs.messagesListRef.scrollToEnd(animated: animated);
+  }
+
+  showSendMessage(message){
+    const { addMessage } = this.props.actions;
+    addMessage(obj2JsonById(message));
   }
 
 }
@@ -386,7 +385,7 @@ ChatContainer.defaultProps = {
   layoutHeight: null,
   bottomOffset: 0,
   onInputTextChanged: () => {},
-  onSend: () => {},
+  onSend: null,
   myId: null,
   roomId: null,
 };

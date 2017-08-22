@@ -74,8 +74,12 @@ export function isJson(obj){
 
  export function array2MapById(array){
    var mapTmp = new Map();
-   for (let i = 0 ; i < array.length; i++){
-     mapTmp.set(array[i].id, array[i]);
+   if (isJson(array)) {
+     mapTmp.set(array.id, array);
+   } else {
+     for (let i = 0 ; i < array.length; i++){
+       mapTmp.set(array[i].id, array[i]);
+     }
    }
    return mapTmp;
  };
@@ -86,6 +90,12 @@ export function isJson(obj){
      arrayTmp.push(json[item]);
    }
    return arrayTmp;
+ };
+
+ export function obj2JsonById(array){
+   var jsonTmp = {};
+   jsonTmp[array.id] = array;
+   return jsonTmp;
  };
 
  export function shallowEqual(objA, objB, compare, compareContext) {
