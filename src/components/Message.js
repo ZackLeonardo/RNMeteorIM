@@ -99,6 +99,7 @@
    position: 'left',
    containerStyle: {},
    showDate: true,
+   renderStatusView: null,
  };
 
  Message.propTypes = {
@@ -110,6 +111,7 @@
      right: ViewPropTypes.style,
    }),
    showDate: PropTypes.bool,
+   renderStatusView: PropTypes.func,
  };
 
  module.exports = Message;

@@ -14,6 +14,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -33,7 +34,9 @@ class Bubble extends Component{
     return (
       <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
         {this.props.position === 'left' ? this.renderTriangle() : null}
+        {this.props.position === 'right' ? this.renderStatusView() : null}
         {this.renderBubble()}
+        {this.props.position === 'left' ? this.renderStatusView() : null}
         {this.props.position === 'right' ? this.renderTriangle() : null}
       </View>
     );
@@ -57,7 +60,6 @@ class Bubble extends Component{
         accessibilityTraits="text"
         {...this.props.touchableProps}>
           <View>
-          {this.renderCustomView()}
           {this.renderMessageImage()}
           {this.renderMessageText()}
           { this.props.showTime ?
@@ -73,9 +75,14 @@ class Bubble extends Component{
     );
   }
 
-  renderCustomView() {
-    if (this.props.renderCustomView) {
-      return this.props.renderCustomView(this.props);
+  renderStatusView() {
+    // return (
+    //   <View style = {styles.statusStyle}>
+    //     {this.props.renderStatusView(this.props)}
+    //   </View>
+    // );
+    if (this.props.renderStatusView) {
+      return this.props.renderStatusView(this.props);
     }
     return null;
   }
@@ -119,11 +126,11 @@ class Bubble extends Component{
     if (this.props.renderStatus) {
         return this.props.renderStatus(currentMessage);
     }
-
+    // status这里，如果为undifed，也是发送成功，后续完善
     if (currentMessage.status) {
       return (
         <View style={styles.statusViewStyle}>
-          {currentMessage.status === 'sent' && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
+          {currentMessage.status === '' && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
           {currentMessage.status === 'received' && <Text style={[styles.statusStyle, this.props.statusStyle]}>✓</Text>}
           {currentMessage.status === 'sendError' && <Text style={[styles.statusStyle, this.props.statusStyle]}>x</Text>}
         </View>
@@ -137,7 +144,7 @@ Bubble.defaultProps = {
   containerStyle: {},
   wrapperStyle: {},
   touchableProps: {},
-  renderCustomView: null,
+  renderStatusView: null,
   currentMessage: {
     text: null,
     createdAt: null,
@@ -170,7 +177,7 @@ Bubble.propTypes = {
   }),
   renderTime: PropTypes.func,
   touchableProps: PropTypes.object,
-  renderCustomView: PropTypes.func,
+  renderStatusView: PropTypes.func,
   statusStyle: Text.propTypes.style,
   showTime: PropTypes.bool,
 };
@@ -185,8 +192,9 @@ const styles = {
     wrapperStyle: {
       borderRadius: 15,
       backgroundColor: '#f0f0f0',
-      marginRight: 60,
+      marginRight: 6,
       minHeight: 20,
+      maxWidth: Dimensions.get('window').width - 80,
     },
     triangleStyle: {
       width: 0,
@@ -213,9 +221,9 @@ const styles = {
     wrapperStyle: {
       borderRadius: 15,
       backgroundColor: '#0084ff',
-      marginLeft: 60,
+      marginLeft: 6,
       minHeight: 20,
-
+      maxWidth: Dimensions.get('window').width - 80,
     },
     triangleStyle: {
       width: 0,

@@ -10,6 +10,8 @@
    FlatList,
    View,
    ViewPropTypes,
+   TouchableOpacity,
+   Button,
    StyleSheet,
  } from 'react-native';
  import PropTypes from 'prop-types';
@@ -26,6 +28,8 @@
 
      this._timeShowed = null;
      this._userMapTmp = null;
+
+    //  this.onResendPress = this.onResendPress.bind(this);
    }
 
    componentWillMount(){
@@ -116,6 +120,7 @@
        showDateType: 'showTimeInDay',
        showDate: this.ShowDate(item),
        user: this.findMessageUser(item),
+       renderStatusView : () => this.renderMessageStatus(item),
      };
     //  console.log('index is :' + index);
      return (
@@ -123,6 +128,28 @@
           <Message {...messageProps}/>
        </View>
      );
+   }
+
+   renderMessageStatus(message){
+     if (message.status && message.status.includes('error')) {
+       return (
+         //❗️  ❕
+          <Button
+            onPress = {this.onResendPress.bind(this, message)}
+            title = '❕'
+            accessibilityLabel = 'resend message'
+          />
+       );
+     }
+     return null;
+   }
+
+   onResendPress(message){
+     console.log('onResendPress message:' + JSON.stringify(message));
+     if (this.props.onResendPress) {
+       return this.props.onResendPress(message);
+     }
+     return () => {};
    }
 
    // 判断是否显示日期，通过时间间隔timeShowInterval判定
@@ -163,6 +190,7 @@ MessagesList.defaultProps = {
   users: {},
   messages: {},
   myId: null,
+  onResendPress: null,
 }
 
 MessagesList.propTypes = {
@@ -171,6 +199,7 @@ MessagesList.propTypes = {
  users: PropTypes.object,
  messages: PropTypes.object,
  myId: PropTypes.string,
+ onResendPress: PropTypes.func,
 }
 
 

@@ -60,6 +60,8 @@ class ChatContainer extends Component {
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
     this.onSend = this.onSend.bind(this);
     this.showSendMessage = this.showSendMessage.bind(this);
+    this.updateSendMessage = this.updateSendMessage.bind(this);
+    this.onResendPress = this.onResendPress.bind(this);
   }
 
   // 解决InputToolbar从顶部闪现，重新render在底部问题
@@ -227,13 +229,13 @@ class ChatContainer extends Component {
           messages={messages}
           users = {users}
           myId = {myId}
+          onResendPress = {this.onResendPress}
         />
       </AnimatedView>
     );
   }
 
   renderInputToolbar(){
-    const { addMessage } = this.props;
     const inputToolbarProps = {
       ...this.props,
       // composerHeight: Math.max(MIN_COMPOSER_HEIGHT, this.state.composerHeight),
@@ -304,34 +306,14 @@ class ChatContainer extends Component {
     if (this.props.onSend) {
       this.props.onSend(message);
     } else {
-      Meteor.call('Messages.addOne', message, (err, content) => {
-        if (err) {
-          console.log('err: ' + err.reason);
-          // 如果使用alert，会导致TextInput失去焦点，重新获取焦点比较繁琐；可以将message的状态显示为错误，点击可以重发。
-          this.setState({ error: err.reason });
-          Alert.alert(
-            'Failed',
-            'Message Send Failed!',
-            [
-              {
-                text: 'Cancel', onPress: () => {
-                  console.log('Cancel Pressed')
-                },
-                style: 'cancel'
-              },
-              {
-                text: 'resend', onPress: () => {
-                  console.log('resend pressed');
-                }
-              },
-            ],
-            { cancelable: false }
-          )
-
-        } else {
-          this.showSendMessage(message);
-        }
-      });
+      this.showSendMessage(message);
+      console.log('Meteor status:' + Meteor.status().connected);
+      if (Meteor.status().connected) {
+        this.meteorMessagesAddOne(message);
+      } else {
+        message.status = 'errorConnect';
+        this.updateSendMessage(message);
+      }
     }
 
     // this.scrollToEnd();
@@ -340,6 +322,48 @@ class ChatContainer extends Component {
       setTimeout(() => {
         this.setIsTypingDisabled(false);
       }, 100);
+    }
+  }
+
+  meteorMessagesAddOne(message){
+    // 先情况status，不然老是error
+    message.status = '';
+    Meteor.call('Messages.addOne', message, (err, content) => {
+      if (err) {
+        console.log('err: ' + err.reason);
+        // // 如果使用alert，会导致TextInput失去焦点，重新获取焦点比较繁琐；可以将message的状态显示为错误，点击可以重发。
+        // Alert.alert(
+        //   'Failed',
+        //   'Message Send Failed!',
+        //   [
+        //     {
+        //       text: 'Cancel', onPress: () => {
+        //         console.log('Cancel Pressed')
+        //       },
+        //       style: 'cancel'
+        //     },
+        //     {
+        //       text: 'resend', onPress: () => {
+        //         console.log('resend pressed');
+        //       }
+        //     },
+        //   ],
+        //   { cancelable: false }
+        // )
+        message.status = 'errorSend';
+        this.updateSendMessage(message);
+      } else {
+        message.status = 'sent';
+        this.updateSendMessage(message);
+      }
+    });
+  }
+
+  onResendPress(message){
+    console.log('onResendPress: ' + JSON.stringify(message));
+    sendMessage = Object.assign({}, message);
+    if (Meteor.status().connected) {
+      this.meteorMessagesAddOne(sendMessage);
     }
   }
 
@@ -363,7 +387,12 @@ class ChatContainer extends Component {
 
   showSendMessage(message){
     const { addMessage } = this.props.actions;
-    addMessage(obj2JsonById(message));
+    addMessage(message);
+  }
+
+  updateSendMessage(message){
+    const { updateMessage } = this.props.actions;
+    updateMessage(message.id, message);
   }
 
 }

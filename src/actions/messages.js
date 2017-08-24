@@ -3,6 +3,9 @@ import * as types from '../constants/ActionTypes';
 export const addMessage = message => ({
   type: types.ADD_MESSAGE, message
 })
+export const updateMessage = (id, message) => ({
+  type: types.UPDATE_MESSAGE, id, message
+})
 export const addMessageAsync = message => ({
   type: types.ADD_MESSAGEASYNC, message
 })
