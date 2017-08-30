@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import Meteor, { createContainer } from 'react-native-meteor';
+import Meteor, { createContainer, Tracker } from 'react-native-meteor';
 import uuid1 from 'uuid/v1';
 
 import { obj2JsonById } from '../constants/utils';
@@ -226,7 +226,7 @@ class ChatContainer extends Component {
       >
         <MessagesList ref='messagesListRef'
           {...this.props}
-          messages={messages}
+          messages = {messages}
           users = {users}
           myId = {myId}
           onResendPress = {this.onResendPress}
@@ -325,6 +325,14 @@ class ChatContainer extends Component {
     }
   }
 
+  onResendPress(message){
+    // console.log('onResendPress: ' + JSON.stringify(message));
+    sendMessage = Object.assign({}, message);
+    if (Meteor.status().connected) {
+      this.meteorMessagesAddOne(sendMessage);
+    }
+  }
+
   meteorMessagesAddOne(message){
     // 先情况status，不然老是error
     message.status = '';
@@ -359,14 +367,6 @@ class ChatContainer extends Component {
     });
   }
 
-  onResendPress(message){
-    console.log('onResendPress: ' + JSON.stringify(message));
-    sendMessage = Object.assign({}, message);
-    if (Meteor.status().connected) {
-      this.meteorMessagesAddOne(sendMessage);
-    }
-  }
-
   resetInputToolbar() {
     if (this.textInput) {
       this.textInput.clear();
@@ -396,8 +396,6 @@ class ChatContainer extends Component {
   }
 
 }
-
-export default createContainer(params=>{}, ChatContainer);
 
 const styles = StyleSheet.create({
   containerStyle: {

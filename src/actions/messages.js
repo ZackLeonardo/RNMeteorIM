@@ -1,5 +1,8 @@
 import * as types from '../constants/ActionTypes';
 
+export const setMessages = messages => ({
+  type: types.SET_MESSAGES, messages
+})
 export const addMessage = message => ({
   type: types.ADD_MESSAGE, message
 })

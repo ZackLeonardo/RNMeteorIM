@@ -50,6 +50,19 @@ const initialState = {
 
 export default function messages(state = initialState, action) {
   switch (action.type) {
+    case types.SET_MESSAGES:
+      if (action.messages) {
+        // var newState = state;
+        // newState.messages[action.message.id] = action.message;
+        // return newState;
+        var newState = state;
+        newState['messages'] = action.messages;
+        // return newState;
+        return Object.assign({}, newState);
+      } else {
+        return state;
+      }
+
     case types.ADD_MESSAGE:
       if (action.message) {
         // var newState = state;

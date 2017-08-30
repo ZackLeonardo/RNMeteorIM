@@ -96,19 +96,26 @@
 
    render(){
      if (isJson(this.props.messages)) {
-       var messagesArray = json2Array(this.props.messages);
-       console.log('MessagesFlatList render');
-       return (
-          <FlatList
-            ref = 'flatListRef'
-            data = {messagesArray}
-            renderItem = {({item, index}) => this.renderItem(item, index)}
-            keyExtractor={item => item.id}
-            initialNumToRender = {20}
-          />
-       );
-     }
-     return null;
+        return (
+           <FlatList
+             ref = 'flatListRef'
+             data = {json2Array(this.props.messages)}
+             renderItem = {({item, index}) => this.renderItem(item, index)}
+             keyExtractor={item => item.id}
+             initialNumToRender = {20}
+           />
+        );
+      } else {
+        return (
+           <FlatList
+             ref = 'flatListRef'
+             data = {this.props.messages}
+             renderItem = {({item, index}) => this.renderItem(item, index)}
+             keyExtractor={item => item.id}
+             initialNumToRender = {20}
+           />
+        );
+      }
    }
 
    renderItem(item, index){
@@ -188,7 +195,7 @@ MessagesList.defaultProps = {
   listRowStyle: {},
   timeShowInterval: 10,
   users: {},
-  messages: {},
+  messages: null,
   myId: null,
   onResendPress: null,
 }
@@ -197,7 +204,7 @@ MessagesList.propTypes = {
  listRowStyle: ViewPropTypes.style,
  timeShowInterval: PropTypes.number,
  users: PropTypes.object,
- messages: PropTypes.object,
+ messages: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
  myId: PropTypes.string,
  onResendPress: PropTypes.func,
 }
