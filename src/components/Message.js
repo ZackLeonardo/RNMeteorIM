@@ -22,7 +22,7 @@
  class Message extends Component{
    render(){
      return (
-       <View>
+       <View onLayout={this.onLayout}>
         {this.renderDay()}
         <View style={[styles[this.props.position].containerStyle, this.props.containerStyle[this.props.position]]}>
           {this.props.position === 'left' ? this.renderAvatar() : null}
@@ -71,6 +71,10 @@
        isSameDay
      }
    }
+
+   onLayout(event) {
+    //  console.log(event);
+   }
  }
 
  const styles = {
@@ -78,6 +82,7 @@
      containerStyle: {
        flexDirection: 'row',
        justifyContent: 'flex-start',
+       alignItems: 'center',
        marginLeft: 8,
        marginRight: 0,
      },
@@ -86,6 +91,7 @@
      containerStyle: {
        flexDirection: 'row',
        justifyContent: 'flex-end',
+       alignItems: 'center',
        marginLeft: 0,
        marginRight: 8,
      },

@@ -138,9 +138,17 @@ export function isJson(obj){
 
         ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
 
-        if(ret === false ||
-           ret === void 0 && valueA !== valueB) {
+        // if(ret === false ||
+        //    ret === void 0 && valueA !== valueB) {
+        //     return false;
+        // }
+        if(ret === false) {
+          return false;
+        }
+        if ( ret === void 0 ) {
+          if (valueA !== valueB){
             return false;
+          }
         }
 
     }

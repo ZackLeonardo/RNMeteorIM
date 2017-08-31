@@ -19,7 +19,7 @@
  import moment from 'moment/min/moment-with-locales.min';
 
  import Message from './Message';
- import { isJson, isSameUser, array2MapById, json2Array, shallowEqual } from '../constants/utils'
+ import { isJson, isSameUser, array2MapById, json2Array, shallowEqual } from '../constants/utils';
 
  class MessagesList extends Component {
 
@@ -28,8 +28,11 @@
 
      this._timeShowed = null;
      this._userMapTmp = null;
+     this._itemsLayout = [];
 
+    //  this.getItemLayout = this.getItemLayout.bind(this);
     //  this.onResendPress = this.onResendPress.bind(this);
+    this.itemLayoutInfo = this.itemLayoutInfo.bind(this);
    }
 
    componentWillMount(){
@@ -41,25 +44,64 @@
      this._timeShowed = null; // 组件更新时，重置使得日期显示正常
    }
 
-   componentDidMount(){
+   // 没必要在这里ScrollToEnd,可以在从list进入room的时候进行
+  //  componentDidMount(){
      //FlatList Component Life Cycle Methods ScrollToIndex ScrollToEnd etc
      // https://stackoverflow.com/questions/43856264/flatlist-component-life-cycle-methods-scrolltoindex-scrolltoend-etc
-     let wait = new Promise((resolve) => setTimeout(resolve, 500));  // Smaller number should work
-     wait.then( () => {
-       this.autoScroll();
-     });
-   }
+     //但是该方法可能会因为因为时间间隔内，组件update中autoScroll，然后到期后又autoScroll导致问题
+    //  let wait = new Promise((resolve) => setTimeout(resolve, 200));  // Smaller number should work
+    //  wait.then( () => {
+    //    console.log('componentDidMount');
+    //    this.autoScroll();
+    //  });
+  //  }
 
    componentDidUpdate(){
-     this.autoScroll();
+     console.log('componentDidUpdate');
+    //  this.autoScroll();
    }
 
+
+
    shouldComponentUpdate(nextProps, nextState){
-     if (!shallowEqual(this.props, nextProps)) {
+    //  if (!shallowEqual(this.props, nextProps)) {
+    //    return true;
+    //  }
+    //  if (!shallowEqual(this.state, nextState)) {
+    //    return true;
+    //  }
+    //  return false;
+    if ( nextProps !== null ) {
+      if (this.messagesChange(this.props.messages, nextProps.messages)){
+        return true;
+      }
+    }
+    if (nextState !== null ) {
+      if (this.messagesChange(this.state.messages, nextState.messages)){
+        return true;
+      }
+    }
+    return false;
+   }
+
+   // 判断messages是否发生变化
+   messagesChange(messagesA, messagesB){
+     var keysA = Object.keys(messagesA);
+     var keysB = Object.keys(messagesB);
+
+     if (keysA.length !== keysB.length){
        return true;
      }
-     if (!shallowEqual(this.state, nextState)) {
-       return true;
+
+     for(var i = 0; i < keysA.length; i++) {
+       var key = keysA[i];
+
+       var valueA = messagesA[key];
+       var valueB = messagesB[key];
+
+       if (valueA !== valueB){
+         return true;
+       }
      }
      return false;
    }
@@ -73,21 +115,27 @@
      }
    }
 
-  //  scrollToBottom() {
-  //   // Settimeout needed here to wait for the page module to be added so scroll works properly
-  //     setTimeout(this.flatListRef.scrollToEnd, 10)
-  //   }
-
    autoScroll() {
     if (this.refs.flatListRef) {
       // this.refs.flatListRef.scrollToOffset({animated: true, offset: 44});
       console.log('autoScroll');
       this.refs.flatListRef.scrollToEnd({animated: false});
     }
-  }
+   }
 
-   scrollTo(options){
-     this.refs.flatListRef.scrollTo(options);
+   getItemLayout(data, index) {
+    //  let listItemRef = eval('this.listItemRef' + index);
+    //  let ITEM_HEIGHT = listItemRef.measure((ox, oy, width, height, px, py) => { height});
+    //  let ITEM_OFFSET = listItemRef.measure((ox, oy, width, height, px, py) => { oy});
+     return {length: 40, offset: 40* index, index};
+   }
+
+   scrollToOffset(options){
+     this.refs.flatListRef.scrollToOffset(options);
+   }
+
+   scrollToIndex(options){
+     this.refs.flatListRef.scrollToIndex(options);
    }
 
    scrollToEnd(options){
@@ -95,27 +143,17 @@
    }
 
    render(){
-     if (isJson(this.props.messages)) {
-        return (
-           <FlatList
-             ref = 'flatListRef'
-             data = {json2Array(this.props.messages)}
-             renderItem = {({item, index}) => this.renderItem(item, index)}
-             keyExtractor={item => item.id}
-             initialNumToRender = {20}
-           />
-        );
-      } else {
-        return (
-           <FlatList
-             ref = 'flatListRef'
-             data = {this.props.messages}
-             renderItem = {({item, index}) => this.renderItem(item, index)}
-             keyExtractor={item => item.id}
-             initialNumToRender = {20}
-           />
-        );
-      }
+     this._itemsLayout = [];
+      return (
+         <FlatList
+           ref = 'flatListRef'
+           data = {isJson(this.props.messages) ? json2Array(this.props.messages): this.props.messages}
+           renderItem = {({item, index}) => this.renderItem(item, index)}
+           keyExtractor={item => item.id}
+           initialNumToRender = {20}
+           getItemLayout={this.getItemLayout}
+         />
+      );
    }
 
    renderItem(item, index){
@@ -129,9 +167,10 @@
        user: this.findMessageUser(item),
        renderStatusView : () => this.renderMessageStatus(item),
      };
-    //  console.log('index is :' + index);
      return (
-       <View style={[styles.listRowStyle, this.props.listRowStyle]}>
+       <View
+        ref={eval('(c) => { this.listItemRef' + index + ' = c; }')}
+        style={[styles.listRowStyle, this.props.listRowStyle]}>
           <Message {...messageProps}/>
        </View>
      );

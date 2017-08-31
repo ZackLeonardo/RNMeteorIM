@@ -44,12 +44,13 @@ class ChatContainer extends Component {
     this._composerHeight = MIN_COMPOSER_HEIGHT;
     this._messagesListTopOffset = 0;
     this._text = '';
+    this._typingDisabled = false;
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
       messagesListHeight: null,
       messagesListTopOffset: this.prepareMessagesListTopOffset(0),
-      typingDisabled: false,
+      // typingDisabled: false,
     };
 
     this._keyboardWillShow = this._keyboardWillShow.bind(this);
@@ -87,13 +88,14 @@ class ChatContainer extends Component {
   }
 
   setIsTypingDisabled(value) {
-    this.setState({
-      typingDisabled: value
-    });
+    // this.setState({
+    //   typingDisabled: value
+    // });
+    this._typingDisabled = value;
   }
 
   getIsTypingDisabled() {
-    return this.state.typingDisabled;
+    return this._typingDisabled;
   }
 
   // 采用设置marginTop的方式而不是改变flatList的height
@@ -122,6 +124,7 @@ class ChatContainer extends Component {
         messagesListTopOffset: this._messagesListTopOffset,
       });
     }
+    this.scrollToRight(this._messagesListTopOffset);
   }
 
   _keyboardDidShow (e) {
@@ -220,11 +223,14 @@ class ChatContainer extends Component {
     console.log('ChatContainer renderMessages');
     const {  messages, users, myId } = this.props;
     const AnimatedView = this.props.isAnimated === true ? Animated.View : View;
+    // ref='messagesListRef'
     return (
       <AnimatedView
         style = {{height: this.state.messagesListHeight, marginTop: this.state.messagesListTopOffset}}
       >
-        <MessagesList ref='messagesListRef'
+        <MessagesList
+
+          ref={(c) => { this.messagesListRef = c }}
           {...this.props}
           messages = {messages}
           users = {users}
@@ -379,10 +385,27 @@ class ChatContainer extends Component {
     });
   }
 
+  scrollToRight(offset){
+    this.scrollToOffset(false, offset);
+
+  }
+
+  scrollToOffset( animated = false , offset) {
+    if (this.messagesListRef ===null) { return }
+    console.log('ChatContainer scrollToOffset');
+    this.messagesListRef.scrollToOffset({animated: animated, offset: offset});
+  }
+
   scrollToEnd( animated = false ) {
-    if (this.refs.messagesListRef ===null) { return }
+    if (this.messagesListRef ===null) { return }
     console.log('ChatContainer scrollToEnd');
-    this.refs.messagesListRef.scrollToEnd(animated: animated);
+    this.messagesListRef.scrollToEnd(animated: animated);
+  }
+
+  scrollToIndex(animated = false, index ) {
+    if (this.messagesListRef ===null) { return }
+    console.log('ChatContainer scrollToEnd');
+    this.messagesListRef.scrollToIndex({animated: animated, index: index});
   }
 
   showSendMessage(message){

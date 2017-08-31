@@ -88,3 +88,7 @@ export default createContainer(
     })
   }, App
 );
+
+// meteor subs update redux store之总结：
+// 首先要明白先后顺序，先meteor subs，从meteor collection获取数据，再用这些数据更新redux store。
+// 其次更新redux store的方式，可以通过触发reducer更新，更直接的方式是store dispatch方式。
