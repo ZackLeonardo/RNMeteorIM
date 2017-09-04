@@ -29,10 +29,10 @@
      this._timeShowed = null;
      this._userMapTmp = null;
      this._itemsLayout = [];
+   }
 
-    //  this.getItemLayout = this.getItemLayout.bind(this);
-    //  this.onResendPress = this.onResendPress.bind(this);
-    this.itemLayoutInfo = this.itemLayoutInfo.bind(this);
+   getItemsLayout(){
+     return this._itemsLayout;
    }
 
    componentWillMount(){
@@ -143,7 +143,7 @@
    }
 
    render(){
-     this._itemsLayout = [];
+     console.log('MessagesFlatList render');
       return (
          <FlatList
            ref = 'flatListRef'
@@ -170,6 +170,12 @@
      return (
        <View
         ref={eval('(c) => { this.listItemRef' + index + ' = c; }')}
+        onLayout={(event) => {
+
+          this._itemsLayout[item.id] = event.nativeEvent.layout;
+          var {x, y, width, height} = this._itemsLayout[item.id];
+          console.log(`${item.id} height is ${height} x is ${x} y is ${y}`);
+        }}
         style={[styles.listRowStyle, this.props.listRowStyle]}>
           <Message {...messageProps}/>
        </View>

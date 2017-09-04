@@ -45,6 +45,7 @@ class ChatContainer extends Component {
     this._messagesListTopOffset = 0;
     this._text = '';
     this._typingDisabled = false;
+    this._messagesItemHeight = 0;
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
@@ -124,7 +125,7 @@ class ChatContainer extends Component {
         messagesListTopOffset: this._messagesListTopOffset,
       });
     }
-    this.scrollToRight(this._messagesListTopOffset);
+    this.scrollToRightPosition(this._messagesListTopOffset, 'keyboardWillShow');
   }
 
   _keyboardDidShow (e) {
@@ -148,6 +149,7 @@ class ChatContainer extends Component {
         messagesListTopOffset: this._messagesListTopOffset,
       });
     }
+    this.scrollToRightPosition(this._messagesListTopOffset, 'keyboardWillHide');
   }
   _keyboardDidHide (e) {
     if (Platform.OS === 'android') {
@@ -186,6 +188,10 @@ class ChatContainer extends Component {
 
   calculateMessagesListTopOffsetWithKeyboard(composerHeight = this._composerHeight) {
     return (- this.getKeyboardHeight() - composerHeight + MIN_COMPOSER_HEIGHT - this.getBottomOffset());
+  }
+
+  calculateChatContentHeight(messagesListTopOffset){
+    return this.state.messagesListHeight - Math.abs(messagesListTopOffset);
   }
 
   prepareMessagesListTopOffset(value) {
@@ -385,9 +391,29 @@ class ChatContainer extends Component {
     });
   }
 
-  scrollToRight(offset){
-    this.scrollToOffset(false, offset);
+  scrollToRightPosition(offset, para){
+    if (this.messagesListRef) {
+      let messageItemsHeight = this.messagesListRef.getItemsLayout();
+      var messagesItemHeight = 0;
+      for( var id in messageItemsHeight){
+        // console.log('item:'+id + ' height is ' + messageItemsHeight[id].height + ', y is ' +  messageItemsHeight[id].y);
+        messagesItemHeight += messageItemsHeight[id].height + 2 * messageItemsHeight[id].y;
+      }
+      // console.log('messageItemsHeight: ' + messagesItemHeight);
+      // console.log('ChatContentHeight:' + this.calculateChatContentHeight(offset));
 
+      if (para.includes('Show')) {
+        if (messagesItemHeight < this.calculateChatContentHeight(offset)){
+          this.scrollToOffset(true, offset);
+        } else {
+          this.scrollToEnd(true);
+        }
+      } else {
+        this.scrollToOffset(true, 0);
+      }
+
+
+    }
   }
 
   scrollToOffset( animated = false , offset) {
