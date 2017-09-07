@@ -57,11 +57,8 @@
   //  }
 
    componentDidUpdate(){
-     console.log('componentDidUpdate');
-    //  this.autoScroll();
+     this.autoScroll(this.props);
    }
-
-
 
    shouldComponentUpdate(nextProps, nextState){
     //  if (!shallowEqual(this.props, nextProps)) {
@@ -71,6 +68,8 @@
     //    return true;
     //  }
     //  return false;
+    console.log(`MessagesFlatList shouldComponentUpdate: ${nextProps.chatContentHeight} -- ${nextProps.chatOffset} -- ${nextProps.keyboardStatus}`);
+
     if ( nextProps !== null ) {
       if (this.messagesChange(this.props.messages, nextProps.messages)){
         return true;
@@ -81,6 +80,7 @@
         return true;
       }
     }
+    this.autoScroll(nextProps);
     return false;
    }
 
@@ -115,28 +115,42 @@
      }
    }
 
-   autoScroll() {
+   autoScroll(propArgs) {
     if (this.refs.flatListRef) {
-      // this.refs.flatListRef.scrollToOffset({animated: true, offset: 44});
-      console.log('autoScroll');
-      this.refs.flatListRef.scrollToEnd({animated: false});
+      var messagesContentHeight = 0;   // 众消息总共占高度
+      for( var id in this._itemsLayout){
+        messagesContentHeight += this._itemsLayout[id].height + 2 * this._itemsLayout[id].y;
+      }
+      if (propArgs.keyboardStatus.includes('show')) {
+        if (messagesContentHeight < propArgs.chatContentHeight){
+          this.scrollToOffset({animated: true, offset: propArgs.chatOffset});
+        } else {
+          this.scrollToEnd(true);
+        }
+      } else {
+        if (messagesContentHeight < propArgs.chatContentHeight){
+          this.scrollToOffset({animated: true, offset: 0});
+        } else {
+          this.scrollToEnd(true);
+        }
+      }
     }
    }
 
-   getItemLayout(data, index) {
-    //  let listItemRef = eval('this.listItemRef' + index);
-    //  let ITEM_HEIGHT = listItemRef.measure((ox, oy, width, height, px, py) => { height});
-    //  let ITEM_OFFSET = listItemRef.measure((ox, oy, width, height, px, py) => { oy});
-     return {length: 40, offset: 40* index, index};
-   }
+  //  getItemLayout(data, index) {
+  //   //  let listItemRef = eval('this.listItemRef' + index);
+  //   //  let ITEM_HEIGHT = listItemRef.measure((ox, oy, width, height, px, py) => { height});
+  //   //  let ITEM_OFFSET = listItemRef.measure((ox, oy, width, height, px, py) => { oy});
+  //    return {length: 40, offset: 40* index, index};
+  //  }
 
    scrollToOffset(options){
      this.refs.flatListRef.scrollToOffset(options);
    }
 
-   scrollToIndex(options){
-     this.refs.flatListRef.scrollToIndex(options);
-   }
+  //  scrollToIndex(options){
+  //    this.refs.flatListRef.scrollToIndex(options);
+  //  }
 
    scrollToEnd(options){
      this.refs.flatListRef.scrollToEnd(options);
@@ -158,6 +172,10 @@
 
    renderItem(item, index){
      console.log('MessagesFlatList renderItem:' + item.id);
+     // 因为出现了一次render 多次renderItem的现象，需要在index为0时，重置ShowDate
+     if (index === 0) {
+       this._timeShowed = null;
+     }
      const messageProps = {
        ...this.props,
        currentMessage: item,
@@ -209,12 +227,15 @@
      if ( this._timeShowed != null ){
         if (moment(message.createdAt).add(-this.props.timeShowInterval, 'm').isAfter(this._timeShowed)){
           this._timeShowed = message.createdAt;
+          console.log('show date ' + message.text );
           return true;
         } else {
+          console.log('not show date ' + message.text );
           return false;
         }
      } else {
        this._timeShowed = message.createdAt;
+       console.log('0show date ' + message.text );
        return true;
      }
    }
