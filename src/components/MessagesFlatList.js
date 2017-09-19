@@ -68,7 +68,6 @@
     //    return true;
     //  }
     //  return false;
-    console.log(`MessagesFlatList shouldComponentUpdate: ${nextProps.chatContentHeight} -- ${nextProps.chatOffset} -- ${nextProps.keyboardStatus}`);
 
     if ( nextProps !== null ) {
       if (this.messagesChange(this.props.messages, nextProps.messages)){
@@ -171,7 +170,7 @@
    }
 
    renderItem(item, index){
-     console.log('MessagesFlatList renderItem:' + item.id);
+    //  console.log('MessagesFlatList renderItem:' + item.id);
      // 因为出现了一次render 多次renderItem的现象，需要在index为0时，重置ShowDate
      if (index === 0) {
        this._timeShowed = null;
@@ -189,10 +188,7 @@
        <View
         ref={eval('(c) => { this.listItemRef' + index + ' = c; }')}
         onLayout={(event) => {
-
           this._itemsLayout[item.id] = event.nativeEvent.layout;
-          var {x, y, width, height} = this._itemsLayout[item.id];
-          console.log(`${item.id} height is ${height} x is ${x} y is ${y}`);
         }}
         style={[styles.listRowStyle, this.props.listRowStyle]}>
           <Message {...messageProps}/>
@@ -215,7 +211,6 @@
    }
 
    onResendPress(message){
-     console.log('onResendPress message:' + JSON.stringify(message));
      if (this.props.onResendPress) {
        return this.props.onResendPress(message);
      }
@@ -227,15 +222,12 @@
      if ( this._timeShowed != null ){
         if (moment(message.createdAt).add(-this.props.timeShowInterval, 'm').isAfter(this._timeShowed)){
           this._timeShowed = message.createdAt;
-          console.log('show date ' + message.text );
           return true;
         } else {
-          console.log('not show date ' + message.text );
           return false;
         }
      } else {
        this._timeShowed = message.createdAt;
-       console.log('0show date ' + message.text );
        return true;
      }
    }
